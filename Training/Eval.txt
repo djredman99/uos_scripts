@@ -1,0 +1,8 @@
+if mana < maxmana
+  useskill 'meditation'
+  while mana < maxmana
+    pause 600
+  endwhile
+else
+  cast 'protection' 'self'
+endif

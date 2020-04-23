@@ -1,0 +1,20 @@
+// This is to assist in training healing on another char.
+// This macro will keep 'self' in a poisoned state.
+// It will heal up if health becomes too low.
+if hits < 20
+  while poisoned 'self'
+    cast 'cure'
+    autotargetself
+    pause 1000
+  endwhile
+  while hits < maxhits
+    cast 'greater heal'
+    autotargetself
+    pause 1000
+  endwhile
+endif
+while not poisoned 'self'
+  cast 'poison'
+  autotargetself
+  pause 1000
+endwhile

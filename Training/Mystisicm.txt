@@ -1,0 +1,20 @@
+if mana < maxmana
+  useskill 'meditation'
+  while mana < maxmana
+    pause 600
+  endwhile
+else
+  if skill 'mysticism' < 30
+    headmsg 'Buy more skill!'
+    stop
+  elseif skill 'mysticism' < 61
+    cast 'stone form' 'self'
+    pause 1000
+  elseif skill 'mysticism' < 90
+    cast 'cleansing winds' 'self'
+    pause 1500
+  elseif skill 'mysticism' < 100
+    cast 'nether cyclone' 'self'
+    pause 1500
+  endif
+endif

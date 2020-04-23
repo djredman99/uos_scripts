@@ -1,0 +1,12 @@
+clearignorelist
+promptalias 'BookBag'
+while findtype 0x2259 any 'BookBag'
+  if property 'Book Name:' 'found' == 'T'
+    ignoreobject 'found'
+  else
+    waitforcontext 'found' 0 5000
+    waitforprompt 5000
+    promptmsg 'B'
+    ignoreobject 'found'
+  endif
+endwhile

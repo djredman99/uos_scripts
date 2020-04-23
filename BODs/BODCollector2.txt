@@ -1,0 +1,11 @@
+waitforcontext 0x28f 1 1500
+waitforgump 0x9bade6ea 1500
+replygump 0x9bade6ea 1
+pause 600
+if @findtype 0x2259 'any' 'backpack'
+  setalias 'BODBook' 'found'
+  while @findtype 0x2258 'any' 'backpack'
+    moveitem 'found' 'BODBook'
+    //pause 600
+  endwhile
+endif

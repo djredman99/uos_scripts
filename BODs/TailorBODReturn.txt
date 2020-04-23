@@ -1,0 +1,274 @@
+// Author: Madu
+// Description: Entrega Bods feitas para o npc tailor
+//Setup:
+//1 - Crie um agente organizer, renomei-o para Rewards, clique em insert e de target em gold, pano e sandals, depois set containers em sua backpack e na bag do banco
+if not @findobject 'Book Barbed Kit'
+  sysmsg ' Select Book Barbed Kit' 32
+  promptalias 'Book Barbed Kit'
+  waitforcontext 'Book Barbed Kit' 0 5000
+  waitforprompt 5000
+  promptmsg 'Barbed Kit'
+endif
+if not @findobject 'Book Horned Kit'
+  sysmsg ' Select Book Horned Kit' 32
+  promptalias 'Book Horned Kit'
+  waitforcontext 'Book Horned Kit' 0 5000
+  waitforprompt 5000
+  promptmsg 'Horned Kit'
+endif
+if not @findobject 'Book Spined Kit'
+  sysmsg ' Select Book Spined Kit' 32
+  promptalias 'Book Spined Kit'
+  waitforcontext 'Book Spined Kit' 0 5000
+  waitforprompt 5000
+  promptmsg 'Spined Kit'
+endif
+if not @findobject 'Book CBD'
+  sysmsg ' Select Book CBD' 32
+  promptalias 'Book CBD'
+  waitforcontext 'Book CBD' 0 5000
+  waitforprompt 5000
+  promptmsg 'CBD'
+endif
+if not @findobject 'Book PS'
+  sysmsg ' Select Book PS' 32
+  promptalias 'Book PS'
+  waitforcontext 'Book PS' 0 5000
+  waitforprompt 5000
+  promptmsg 'PS'
+endif
+if not @findobject 'Book Others'
+  sysmsg ' Select Book Others' 32
+  promptalias 'Book Others'
+  waitforcontext 'Book Others' 0 5000
+  waitforprompt 5000
+  promptmsg 'Others'
+endif
+if not @findobject 'Book Filled'
+  sysmsg ' Select Book Filled' 32
+  promptalias 'Book Filled'
+  waitforcontext 'Book Filled' 0 5000
+  waitforprompt 5000
+  promptmsg 'Filled'
+endif
+if not @findobject 'Book Reset'
+  sysmsg ' Select Book Reset' 32
+  promptalias 'Book Reset'
+  waitforcontext 'Book Reset' 0 5000
+  waitforprompt 5000
+  promptmsg 'Reset'
+endif
+if not @findobject 'Book Trash Bods'
+  sysmsg ' Select Book Trash' 32
+  promptalias 'Book Trash Bods'
+  waitforcontext 'Book Trash Bods' 0 5000
+  waitforprompt 5000
+  promptmsg 'Trash'
+endif
+if not @findobject 'Npc'
+  sysmsg ' Select Npc' 32
+  promptalias 'Npc'
+endif
+if not @findobject 'Dye Tub'
+  sysmsg ' Select Dye Tub' 32
+  promptalias 'Dye Tub'
+endif
+if not listexists 'Larges6'
+  @createlist 'Larges6'
+  @pushlist 'Larges6' 'Leather Gorget'
+  @pushlist 'Larges6' 'Leather Cap'
+  @pushlist 'Larges6' 'Leather Gloves'
+  @pushlist 'Larges6' 'Leather Sleeves'
+  @pushlist 'Larges6' 'Leather Leggings'
+  @pushlist 'Larges6' 'Leather Tunic'
+  @pushlist 'Larges6' 'Leather Skirt'
+  @pushlist 'Larges6' 'Leather Bustier'
+  @pushlist 'Larges6' 'Leather Shorts'
+  @pushlist 'Larges6' 'Female Leather Armor'
+  @pushlist 'Larges6' 'Studded Armor'
+  @pushlist 'Larges6' 'Studded Bustier'
+endif
+if not listexists 'Larges5'
+  @createlist 'Larges5'
+  @pushlist 'Larges5' 'Studded Gorget'
+  @pushlist 'Larges5' 'Studded Gloves'
+  @pushlist 'Larges5' 'Studded Sleeves'
+  @pushlist 'Larges5' 'Studded Leggings'
+  @pushlist 'Larges5' 'Studded Tunic'
+  @pushlist 'Larges5' 'Bone Helmet'
+  @pushlist 'Larges5' 'Bone Gloves'
+  @pushlist 'Larges5' 'Bone Arms'
+  @pushlist 'Larges5' 'Bone Leggings'
+  @pushlist 'Larges5' 'Bone Armor'
+endif
+if not listexists 'Larges4'
+  @createlist 'Larges4'
+  @pushlist 'Larges4' 'Sandals'
+  @pushlist 'Larges4' 'Shoes'
+  @pushlist 'Larges4' 'Boots'
+  @pushlist 'Larges4' 'Thigh Boots'
+endif
+if not listexists 'LargeTownCrier'
+  @createlist 'LargeTownCrier'
+  @pushlist 'LargeTownCrier' 'feathered hat'
+  @pushlist 'LargeTownCrier' 'surcoat'
+  @pushlist 'LargeTownCrier' 'fancy shirt'
+  @pushlist 'LargeTownCrier' 'short pants'
+  @pushlist 'LargeTownCrier' 'Thigh Boots'
+endif
+// Start
+if @findtype 0x2258 0x483 'backpack'
+  //msg 'thomas'
+  feed 'npc' 0x2258
+  // pause 1000
+  waitforcontext 'Npc' 1 15000
+  pause 1500
+  useobject 'Dye Tub'
+  waitfortarget 2000
+  targettype! 0x1767 'any' 'backpack'
+  canceltarget
+  pause 1500
+  organizer 'Rewards'
+  replygump 0x9bade6ea 1
+  replygump 0xbe0dad1e 1
+  pause 1000
+  //Filter
+  if @findtype 0x2258 0x483 'backpack'
+    for 0 to Larges6
+      if @property Larges6[] 'found'
+        @setalias 'Stop' 'Self'
+        if  @property 'exceptional' 'found'
+          if @property '20' 'found'
+            if  @property 'made' 'found'
+              @moveitem 'found' 'Book Barbed Kit'
+            else
+              @moveitem 'found' 'Book PS'
+            endif
+          else
+            if  @property 'Barbed' 'found' or @property 'Horned' 'found'
+              @moveitem 'found' 'Book Barbed Kit'
+            elseif @property 'Spined' 'found'
+              @moveitem 'found' 'Book PS'
+            else
+              @moveitem 'found' 'Book Horned Kit'
+            endif
+          endif
+        else
+          if @property '20' 'found'
+            if @property 'Barbed' 'found'
+              @moveitem 'found' 'Book Barbed Kit'
+            elseif @property 'Horned' 'found'
+              @moveitem 'found' 'Book PS'
+            elseif @property 'Spined' 'found'
+              @moveitem 'found' 'Book Horned Kit'
+            else
+              @moveitem 'found' 'Book CBD'
+            endif
+          else
+            @moveitem 'found' 'Book Trash Bods'
+          endif
+        endif
+      endif
+    endfor
+    if not findalias 'Stop'
+      for 0 to Larges5
+        if @property Larges5[] 'found'
+          @setalias 'Stop' 'Self'
+          if  @property 'exceptional' 'found'
+            if @property '20' 'found'
+              if @property 'Barbed' 'found'
+                @moveitem 'found' 'Book Barbed Kit'
+              elseif @property 'Horned' 'found'
+                @moveitem 'found' 'Book PS'
+              elseif @property 'Spined' 'found'
+                @moveitem 'found' 'Book Horned Kit'
+              elseif not @property 'bone' 'found'
+                @moveitem 'found' 'Book CBD'
+              else
+                @moveitem 'found' 'Book Trash Bods'
+              endif
+            else
+              if @property 'Barbed' 'found'
+                @moveitem 'found' 'Book PS'
+              elseif @property 'Horned' 'found'
+                @moveitem 'found' 'Book Horned Kit'
+              elseif @property 'Spined' 'found' and @property '10' 'found'
+                @moveitem 'found' 'Book CBD'
+              else
+                @moveitem 'found' 'Book Trash Bods'
+              endif
+            endif
+          else
+            @moveitem 'found' 'Book Trash Bods'
+          endif
+        endif
+      endfor
+    endif
+    if not findalias 'Stop'
+      for 0 to Larges4
+        if @property Larges4[] 'found'
+          @setalias 'Stop' 'Self'
+          if  @property 'exceptional' 'found'
+            if @property 'Barbed' 'found' and @property '20' 'found'
+              @moveitem 'found' 'Book Horned Kit'
+            elseif @property 'Barbed' 'found' and @property '10' 'found'
+              @moveitem 'found' 'Book CBD'
+            elseif @property 'Horned' 'found' and @property '20' 'found'
+              @moveitem 'found' 'Book CBD'
+            elseif @property 'Spined' 'found' and @property '20' 'found'
+              @moveitem 'found' 'Book Others'
+            elseif @property 'Horned' 'found' or @property 'Barbed' 'found'
+              @moveitem 'found' 'Book Others'
+            elseif @property '20' 'found' and @property 'Thigh Boots' 'found'
+              @moveitem 'found' 'Book CBD'
+            elseif @property '20' 'found' and @property 'Feathered' 'found'
+              @moveitem 'found' 'Book CBD'
+            else
+              @moveitem 'found' 'Book Trash Bods'
+            endif
+          else
+            if @property 'Spined' 'found' and not @property '20' 'found'
+              @moveitem 'found' 'Book Spined Kit'
+            elseif @property '20' 'found' and not @property 'feathered' 'found'
+              @moveitem 'found' 'Book Spined Kit'
+            else
+              @moveitem 'found' 'Book Trash Bods'
+            endif
+          endif
+        endif
+      endfor
+    endif
+    if not findalias 'Stop'
+      for 0 to LargeTownCrier
+        //sysmsg ok ok
+        if @property LargeTownCrier[] 'found'
+          //sysmsg ok
+          @setalias 'Stop' 'Self'
+          if  @property 'exceptional' 'found' and @property '20' 'found'
+            @moveitem 'found' 'Book CBD'
+          else
+            @moveitem 'found' 'Book Reset'
+          endif
+        endif
+      endfor
+    endif
+    if not findalias 'Stop'
+      if not @property 'Large' 'found'
+        @moveitem 'found' 'Book Reset'
+      elseif not @property 'exceptional' 'found' and @property 'tricorne' 'found'
+        @moveitem 'found' 'Book Spined Kit'
+      else
+        @moveitem 'found' 'Book Trash Bods'
+      endif
+    endif
+    pause 6000
+  endif
+elseif not @property 'Deeds In Book: 0' 'Book Filled'
+  useobject! 'Book Filled'
+  waitforgump 0x54f555df 5000
+  replygump 0x54f555df 5
+  pause 1500
+else
+  stop
+endif
+@unsetalias 'Stop'

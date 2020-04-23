@@ -1,0 +1,735 @@
+// ******************************
+// Master Mining Script
+//
+// author: raveX
+//
+// ******************************
+// Script will use tools from a Restock chest or Tinker them
+// It also requires an Organizer titled 'Mining' to stash mined objects
+// ******************************
+//
+// TODO's
+// 1. Debug 2 tools breaking while mining, leaving no tools left in pack
+// 2. Test with Prospectors tools
+//
+// ******************************
+// CLEAR User option lists
+// ******************************
+@clearlist 'useprospectortool'
+@clearlist 'tinkershovels'
+@clearlist 'useshovels'
+@clearlist 'textcolor'
+@clearlist 'errortextcolor'
+@clearlist 'weightlimit'
+@clearlist 'myToolType'
+@clearlist 'displayLocationInfo'
+@clearlist 'useRedDefense'
+@clearlist 'useHomeWalk'
+@clearlist 'alwaysStartFromBeginning'
+@clearlist 'numberOfToolsToCarry'
+//
+@createlist 'useprospectortool'
+@createlist 'tinkershovels'
+@createlist 'useshovels'
+@createlist 'textcolor'
+@createlist 'errortextcolor'
+@createlist 'weightlimit'
+@createlist 'myToolType'
+@createlist 'displayLocationInfo'
+@createlist 'useRedDefense'
+@createlist 'useHomeWalk'
+@createlist 'alwaysStartFromBeginning'
+@createlist 'numberOfToolsToCarry'
+//
+// ******************************
+// User options (Yes/yes or No/no)
+// ******************************
+// Use Prospectors Tools
+pushlist 'useprospectortool' 'No'
+// Use tinkering to create shovels or have tools stocked in restock chest,
+// such as sturdy pickaxe/shovels
+// If tinkering, plenty of Ingots should be in Restock chest
+pushlist 'tinkershovels' 'Yes'
+// For simplicity, pick either Shovels or Picks to use for any particular run
+// If the above setting 'tinkershovels' is set to yes, this will have no effect
+pushlist 'useshovels' 'No' // 'No' will use picks
+// Will output the Runebook and Rune position in a messagebox
+pushlist 'displayLocationInfo' 'No'
+// Will call guards in guarded region or recall home if a murderer is near
+pushlist 'useRedDefense' 'Yes'
+// Set to yes if you want to use the routine to walk into home/secuire location
+// This will occur at the end of macro or a stopping condition that brings
+// you back home
+pushlist 'useHomeWalk' 'Yes'
+// This script will track where you left off from a previous run
+// It will default to continue at that point if you have stopped the macro
+// for any reason.  By setting this to Yes, you will always start the script
+// at Book 1 Rune 1
+pushlist 'alwaysStartFromBeginning' 'No'
+// ******************************
+// User options (integers)
+// ******************************
+// System Message colors
+pushlist 'textcolor' '43'
+pushlist 'errortextcolor' '33'
+// Weight threshold where you should recall home and unload
+// This should be less than your max carry weight
+pushlist 'weightlimit' '480'
+// If you are not tinkering shovels, how many picks/shovels do you
+// want to carry on you.
+pushlist 'numberOfToolsToCarry' '1'
+// ******************************
+// Setup RuneBooks
+// ******************************
+if not @findobject 'MiningBookOne'
+  promptalias 'MiningBookOne'
+endif
+if not @findobject 'MiningBookTwo'
+  promptalias 'MiningBookTwo'
+endif
+if not @findobject 'MiningBookThree'
+  promptalias 'MiningBookThree'
+endif
+// Dropoff should be first rune in Home book
+if not @findobject 'MiningHome'
+  promptalias 'MiningHome'
+endif
+// Restock is a chest within reach of the Home Recall location
+if not @findalias 'MiningRestock'
+  promptalias 'MiningRestock'
+endif
+if not listexists 'MineBook'
+  createlist 'MineBook'
+endif
+// Have to do almost the same thing 2 times because
+// you cannot have 3 cluases in an 'if' statement
+if list 'MineBook' == 0
+  pushlist 'MineBook' 'MiningBookOne'
+  pushlist 'MineBook' 'MiningBookTwo'
+  pushlist 'MineBook' 'MiningBookThree'
+endif
+if @inlist 'alwaysStartFromBeginning' 'Yes' or @inlist 'alwaysStartFromBeginning' 'yes'
+  clearlist 'MineBook'
+  pushlist 'MineBook' 'MiningBookOne'
+  pushlist 'MineBook' 'MiningBookTwo'
+  pushlist 'MineBook' 'MiningBookThree'
+endif
+if not listexists 'Runes'
+  createlist 'Runes'
+endif
+if list 'Runes' == 0
+  pushlist 'Runes' 50
+  pushlist 'Runes' 51
+  pushlist 'Runes' 52
+  pushlist 'Runes' 53
+  pushlist 'Runes' 54
+  pushlist 'Runes' 55
+  pushlist 'Runes' 56
+  pushlist 'Runes' 57
+  pushlist 'Runes' 58
+  pushlist 'Runes' 59
+  pushlist 'Runes' 60
+  pushlist 'Runes' 61
+  pushlist 'Runes' 62
+  pushlist 'Runes' 63
+  pushlist 'Runes' 64
+  pushlist 'Runes' 65
+endif
+if @inlist 'alwaysStartFromBeginning' 'Yes' or @inlist 'alwaysStartFromBeginning' 'yes'
+  clearlist 'Runes'
+  pushlist 'Runes' 50
+  pushlist 'Runes' 51
+  pushlist 'Runes' 52
+  pushlist 'Runes' 53
+  pushlist 'Runes' 54
+  pushlist 'Runes' 55
+  pushlist 'Runes' 56
+  pushlist 'Runes' 57
+  pushlist 'Runes' 58
+  pushlist 'Runes' 59
+  pushlist 'Runes' 60
+  pushlist 'Runes' 61
+  pushlist 'Runes' 62
+  pushlist 'Runes' 63
+  pushlist 'Runes' 64
+  pushlist 'Runes' 65
+endif
+// ******************************
+// Setup HomeRune
+// ******************************
+// This should be the position in your Runebook at
+// which your home recall position is located
+// ******************************
+if not @listexists 'HomeRune'
+  @createlist 'HomeRune'
+endif
+@clearlist 'HomeRune'
+pushlist 'HomeRune' 50
+// ******************************
+// Setup Tools
+// ******************************
+if not listexists 'MineTools'
+  createlist 'MineTools'
+  pushlist 'MineTools' 0xe86  // Picks
+  pushlist 'MineTools' 0xf39  // Shovels
+  pushlist 'MineTools' 0xfb4  // Prospectors Tool
+  pushlist 'MineTools' 0x1eb8 // TinkerTools
+endif
+// ******************************
+// Setup Walk routine
+// ******************************
+// This is used to walk into your house/secure location after
+// recalling home at the end of the macro or in a stopping condition
+// Set a path from your home recall location to your final stopping position
+if not @listexists 'homewalk'
+  @createlist 'homewalk'
+endif
+@clearlist 'homewalk'
+pushlist 'homewalk' 'north'
+pushlist 'homewalk' 'north'
+pushlist 'homewalk' 'north'
+pushlist 'homewalk' 'north'
+pushlist 'homewalk' 'north'
+pushlist 'homewalk' 'north'
+pushlist 'homewalk' 'north'
+pushlist 'homewalk' 'north'
+pushlist 'homewalk' 'north'
+// ******************************
+// Tinker Skill check
+// ******************************
+if @inlist 'tinkershovels' 'Yes' or @inlist 'tinkershovels' 'yes'
+  if skill 'tinkering' < 50
+    sysmsg 'YOUR TINKERING SKILL IS TOO LOW' errortextcolor[0]
+    sysmsg 'CHANGE THE USE TINKERING SETTING OR RAISE SKILL' errortextcolor[0]
+    stop
+  endif
+endif
+// ******************************
+// Start by Recalling Home and ensuring stocked up
+// ******************************
+useobject 'MiningHome'
+waitforgump 0x59 5000
+replygump 0x59 HomeRune[0]
+pause 2500
+useobject 'MiningRestock'
+pause 2000
+// ******************************
+// Stock tools
+// ******************************
+if @inlist 'tinkershovels' 'No' or @inlist 'tinkershovels' 'no'
+  if @inlist 'useshovels' 'No' or @inlist 'useshovels' 'no'
+    if @counttype MineTools[0] 'any' 'backpack' < numberOfToolsToCarry[0]
+      if @counttype MineTools[0] 'any' 'backpack' == 0 and @counttype MineTools[0] 'any' 'MiningRestock' == 0
+        sysmsg "NEED MORE PICKS, STOPPING" errortextcolor[0]
+        if @inlist 'useHomeWalk' 'Yes' or @inlist 'useHomeWalk' 'yes'
+          for 0 to 'homewalk'
+            walk homewalk[]
+          endfor
+        endif
+        stop
+      endif
+      while @counttype MineTools[0] 'any' 'backpack' < numberOfToolsToCarry[0] and @counttype MineTools[0] 'any' 'MiningRestock' > 0
+        movetype  MineTools[0] 'MiningRestock' 'backpack' 'any' 1
+        pause 1000
+      endwhile
+    endif
+  elseif @inlist 'useshovels' 'Yes' or @inlist 'useshovels' 'yes'
+    if @counttype MineTools[1] 'any' 'backpack' < numberOfToolsToCarry[0]
+      if @counttype MineTools[1] 'any' 'backpack' == 0 and @counttype MineTools[1] 'any' 'MiningRestock' == 0
+        sysmsg "NEED MORE SHOVELS, STOPPING" errortextcolor[0]
+        if @inlist 'useHomeWalk' 'Yes' or @inlist 'useHomeWalk' 'yes'
+          for 0 to 'homewalk'
+            walk homewalk[]
+          endfor
+        endif
+        stop
+      endif
+      while @counttype MineTools[1] 'any' 'backpack' < numberOfToolsToCarry[0] and @counttype MineTools[1] 'any' 'MiningRestock' > 0
+        @movetype  MineTools[1] 'MiningRestock' 'backpack' 'any' 1
+        pause 1000
+      endwhile
+    endif
+  else
+    sysmsg 'YOUR USESHOVELS SETTING IS BAD, IT SHOULD ONLY BE Yes OR No' errortextcolor[0]
+    if @inlist 'useHomeWalk' 'Yes' or @inlist 'useHomeWalk' 'yes'
+      for 0 to 'homewalk'
+        walk homewalk[]
+      endfor
+    endif
+    stop
+  endif
+elseif @inlist 'tinkershovels' 'Yes' or @inlist 'tinkershovels' 'yes'
+  // Ingots are '0x1bf2'
+  if @counttype 0x1bf2 0x0 'backpack' < 25
+    if not @findtype 0x1bf2 0x0 'MiningRestock' and @counttype 0x1bf2 0x0 'backpack' < 4
+      sysmsg "NO MORE INGOTS IN RESTOCK, STOPPING" errortextcolor[0]
+      if @inlist 'useHomeWalk' 'Yes' or @inlist 'useHomeWalk' 'yes'
+        for 0 to 'homewalk'
+          walk homewalk[]
+        endfor
+      endif
+      stop
+    endif
+    if @counttype 0x1bf2 0x0 'MiningRestock' < 50
+      sysmsg "LOW ON INGOTS IN RESTOCK" errortextcolor[0]
+      @movetype 0x1bf2 'MiningRestock' 'backpack' 0 0 0 0x0
+    else
+      @movetype 0x1bf2 'MiningRestock' 'backpack' 0 0 0 0x0 50
+    endif
+  endif
+  // Have at least 2 tinker tools in pack
+  while @counttype MineTools[3] 'any' 'backpack' < 2
+    @usetype MineTools[3] 'any' 'backpack'
+    waitforgump 0x38920abd 15000
+    replygump 0x38920abd 15
+    waitforgump 0x38920abd 15000
+    replygump 0x38920abd 23
+    pause 1500
+  endwhile
+  // Make Shovels
+  while @counttype MineTools[1] 'any' 'backpack' < 2
+    usetype MineTools[3] 'any' 'backpack'
+    waitforgump 0x38920abd 15000
+    replygump 0x38920abd 15
+    waitforgump 0x38920abd 15000
+    replygump 0x38920abd 72
+    pause 1500
+  endwhile
+  if @gumpexists 0x38920abd
+    replygump 0x38920abd 0
+  endif
+else
+  sysmsg 'YOUR TINKERSHOVELS SETTING IS BAD' errortextcolor[0]
+  if @inlist 'useHomeWalk' 'Yes' or @inlist 'useHomeWalk' 'yes'
+    for 0 to 'homewalk'
+      walk homewalk[]
+    endfor
+  endif
+  stop
+endif
+if @inlist 'useprospectortool' 'Yes' or @inlist 'useprospectortool' 'yes'
+  if @counttype MineTools[2] 'any' 'backpack' < 1
+    if @counttype MineTools[2] 'any' 'MiningRestock' < 1
+      sysmsg "OUT OF PROSPECTORS TOOLS" errortextcolor[0]
+    else
+      while @counttype MineTools[2] 'any' 'backpack' < 1
+        @movetype MineTools[2] 'MiningRestock' 'backpack' 'any' 1
+        pause 1000
+      endwhile
+    endif
+  endif
+endif
+// ******************************
+// Set the specific tool type (pick or shovel) being used
+// ******************************
+@clearlist 'myToolType'
+if @inlist 'useshovels' 'No' or @inlist 'useshovels' 'no'
+  @pushlist 'myToolType' MineTools[0]
+else
+  @pushlist 'myToolType' MineTools[1]
+endif
+// This setting will override the 'useshovel' setting
+if @inlist 'tinkershovels' 'Yes' or @inlist 'tinkershovels' 'yes'
+  @clearlist 'myToolType'
+  @pushlist 'myToolType' MineTools[1]
+endif
+// ******************************
+// Set starting direction
+// ******************************
+if not @listexists 'minedirection'
+  @createlist 'minedirection'
+endif
+@clearlist 'minedirection'
+@pushlist 'minedirection' 'west'
+// founddirection list
+@removelist 'founddirection'
+@createlist 'founddirection'
+@pushlist 'founddirection' 'no'
+// ******************************
+// Start Recall Cycle
+// ******************************
+while list 'MineBook' > 0
+  if list 'Runes' == 0
+    pushlist 'Runes' 50
+    pushlist 'Runes' 51
+    pushlist 'Runes' 52
+    pushlist 'Runes' 53
+    pushlist 'Runes' 54
+    pushlist 'Runes' 55
+    pushlist 'Runes' 56
+    pushlist 'Runes' 57
+    pushlist 'Runes' 58
+    pushlist 'Runes' 59
+    pushlist 'Runes' 60
+    pushlist 'Runes' 61
+    pushlist 'Runes' 62
+    pushlist 'Runes' 63
+    pushlist 'Runes' 64
+    pushlist 'Runes' 65
+  endif
+  while list 'Runes' > 0
+    @clearjournal
+    @clearlist 'founddirection'
+    pause 1000
+    useobject MineBook[0]
+    waitforgump 0x59 5000
+    replygump 0x59 Runes[0]
+    pause 2000
+    // Will show the current recall position (book/location)
+    if @inlist 'displayLocationInfo' 'Yes' or @inlist 'displayLocationInfo' 'yes'
+      where
+      if list 'MineBook' == 3
+        messagebox Runes[0] 'Book One'
+        //sysmsg 'Book One' textcolor[0]
+      elseif list 'MineBook' == 2
+        messagebox Runes[0] 'Book Two'
+        //sysmsg 'Book Two' textcolor[0]
+      elseif list 'MineBook' == 1
+        messagebox Runes[0] 'Book Three'
+        //sysmsg 'Book Three' textcolor[0]
+      endif
+      //sysmsg Runes[0] textcolor[0]
+    endif
+    if @inlist 'useRedDefense' 'Yes' or @inlist 'useRedDefense' 'yes'
+      @getenemy 'murderer' 'Enemy' 'criminal' 'humanoid'
+      if @findobject 'enemy'
+        if inregion 'guards'
+          headmsg 'BADGUY' errortextcolor[0] 'enemy'
+          msg 'Guards'
+        else
+          useobject 'MiningHome'
+          waitforgump 0x59 5000
+          replygump 0x59 HomeRune[0]
+          pause 2500
+          if @inlist 'useHomeWalk' 'Yes' or @inlist 'useHomeWalk' 'yes'
+            for 0 to 'homewalk'
+              walk homewalk[]
+            endfor
+          endif
+          stop
+        endif
+      endif
+    endif
+    if @inlist 'useprospectortool' 'Yes' or @inlist 'useprospectortool' 'yes'
+      if @findtype MineTools[2] 'any' 'backpack'
+        while not @injournal 'You sift' 'system' and not @injournal 'looks to be prospected'
+          useobject 'found'
+          waitfortarget 3000
+          if @inlist 'minedirection' 'west'
+            sysmsg 'Checking West' textcolor[0]
+            targettileoffset -1 0 0
+            pause 1500
+            if injournal 'cannot use your prospector'
+              @clearlist 'minedirection'
+              @pushlist 'minedirection' 'north'
+            endif
+          elseif @inlist 'minedirection' 'north'
+            sysmsg 'Checking North' textcolor[0]
+            targettileoffset 0 -1 0
+            pause 1500
+            if injournal 'cannot use your prospector'
+              @clearlist 'minedirection'
+              @pushlist 'minedirection' 'east'
+            endif
+          elseif @inlist 'minedirection' 'east'
+            sysmsg 'Checking East' textcolor[0]
+            targettileoffset 1 0 0
+            pause 1500
+            if injournal 'cannot use your prospector'
+              @clearlist 'minedirection'
+              @pushlist 'minedirection' 'south'
+            endif
+          elseif @inlist 'minedirection' 'south'
+            sysmsg 'Checking South' textcolor[0]
+            targettileoffset 0 1 0
+            pause 1500
+            if injournal 'cannot use your prospector'
+              @clearlist 'minedirection'
+              @pushlist 'minedirection' 'west'
+            endif
+          endif
+        endwhile
+        pushlist 'founddirection' 'yes'
+      endif
+    endif
+    @findtype myToolType[0] 'any' 'backpack'
+    while not @injournal 'no metal here' 'system'
+      @canceltarget
+      if @inlist 'useRedDefense' 'Yes' or @inlist 'useRedDefense' 'yes'
+        @getenemy 'murderer' 'Enemy' 'criminal' 'humanoid'
+        if @findobject 'enemy'
+          if inregion 'guards'
+            headmsg 'BADGUY' errortextcolor[0] 'enemy'
+            msg 'Guards'
+          else
+            useobject 'MiningHome'
+            waitforgump 0x59 5000
+            replygump 0x59 HomeRune[0]
+            pause 2500
+            if @inlist 'useHomeWalk' 'Yes' or @inlist 'useHomeWalk' 'yes'
+              for 0 to 'homewalk'
+                walk homewalk[]
+              endfor
+            endif
+            stop
+          endif
+        endif
+      endif
+      if not @findobject 'found' // Tool broke find another
+        @findtype myToolType[0] 'any' 'backpack'
+        pause 600
+      endif
+      if not @findtype myToolType[0] 'any' 'backpack'
+        sysmsg "OUT OF TOOLS, I NEED TO RESTOCK" textcolor[0]
+        useobject 'MiningHome'
+        waitforgump 0x59 5000
+        replygump 0x59 HomeRune[0]
+        pause 2500
+        organizer 'Mining'
+        while organizing
+          pause 500
+        endwhile
+        pause 1000
+        if @inlist 'tinkershovels' 'No' or @inlist 'tinkershovels' 'no'
+          if @inlist 'useshovels' 'No' or @inlist 'useshovels' 'no'
+            if @counttype MineTools[0] 'any' 'backpack' < numberOfToolsToCarry[0]
+              useobject 'MiningRestock'
+              pause 2000
+              if @counttype MineTools[0] 'any' 'backpack' == 0 and @counttype MineTools[0] 'any' 'MiningRestock' == 0
+                sysmsg "NEED MORE PICKS, STOPPING" errortextcolor[0]
+                if @inlist 'useHomeWalk' 'Yes' or @inlist 'useHomeWalk' 'yes'
+                  for 0 to 'homewalk'
+                    walk homewalk[]
+                  endfor
+                endif
+                stop
+              endif
+              while @counttype MineTools[0] 'any' 'backpack' < numberOfToolsToCarry[0] and @counttype MineTools[0] 'any' 'MiningRestock' > 0
+                @movetype  MineTools[0] 'MiningRestock' 'backpack' 'any' 1
+                pause 1000
+              endwhile
+            endif
+          elseif @inlist 'useshovels' 'Yes' or @inlist 'useshovels' 'yes'
+            if @counttype MineTools[1] 'any' 'backpack' < numberOfToolsToCarry[0]
+              useobject 'MiningRestock'
+              pause 2000
+              if @counttype MineTools[1] 'any' 'backpack' == 0 and @counttype MineTools[1] 'any' 'MiningRestock' == 0
+                sysmsg "NEED MORE SHOVELS, STOPPING" errortextcolor[0]
+                if @inlist 'useHomeWalk' 'Yes' or @inlist 'useHomeWalk' 'yes'
+                  for 0 to 'homewalk'
+                    walk homewalk[]
+                  endfor
+                endif
+                stop
+              endif
+              while @counttype MineTools[1] 'any' 'backpack' < numberOfToolsToCarry[0] and @counttype MineTools[1] 'any' 'MiningRestock' > 0
+                @movetype  MineTools[1] 'MiningRestock' 'backpack' 'any' 1
+                pause 1000
+              endwhile
+            endif
+          endif
+        endif
+        pause 1600
+        useobject MineBook[0]
+        waitforgump 0x59 5000
+        replygump 0x59 Runes[0]
+        pause 1500
+        @findtype myToolType[0] 'any' 'backpack'
+        pause 600
+        sysmsg 'RESUMING AFTER RESTOCK' textcolor[0]
+      endif
+      useobject 'found'
+      waitfortarget 2000
+      if not @inlist 'founddirection' 'yes'
+        if @inlist 'minedirection' 'west'
+          sysmsg 'Checking West' textcolor[0]
+          targettileoffset -1 0 0
+          pause 1500
+          if not @injournal 'ore' 'system' and not @injournal 'gem'
+            @clearlist 'minedirection'
+            @pushlist 'minedirection' 'north'
+          else
+            @pushlist 'founddirection' 'yes'
+          endif
+        elseif @inlist 'minedirection' 'north'
+          sysmsg 'Checking North' textcolor[0]
+          targettileoffset 0 -1 0
+          pause 1500
+          if not @injournal 'ore' 'system' and not @injournal 'gem'
+            @clearlist 'minedirection'
+            @pushlist 'minedirection' 'east'
+          else
+            @pushlist 'founddirection' 'yes'
+          endif
+        elseif @inlist 'minedirection' 'east'
+          sysmsg 'Checking East' textcolor[0]
+          targettileoffset 1 0 0
+          pause 1500
+          if not @injournal 'ore' 'system' and not @injournal 'gem'
+            @clearlist 'minedirection'
+            @pushlist 'minedirection' 'south'
+          else
+            @pushlist 'founddirection' 'yes'
+          endif
+        elseif @inlist 'minedirection' 'south'
+          sysmsg 'Checking South' textcolor[0]
+          targettileoffset 0 1 0
+          pause 1500
+          if not @injournal 'ore' 'system' and not @injournal 'gem'
+            @clearlist 'minedirection'
+            @pushlist 'minedirection' 'west
+          else
+            @pushlist 'founddirection' 'yes'
+          endif
+        endif
+      else
+        if @inlist 'minedirection' 'west'
+          targettileoffset -1 0 0
+          pause 600
+        elseif @inlist 'minedirection' 'north'
+          targettileoffset 0 -1 0
+          pause 600
+        elseif @inlist 'minedirection' 'east'
+          targettileoffset 1 0 0
+          pause 600
+        elseif @inlist 'minedirection' 'south'
+          targettileoffset 0 1 0
+          pause 600
+        endif
+      endif
+      if weight > weightlimit[0] or @counttype myToolType[0] 'any' 'backpack' == 0
+        pause 600
+        useobject 'MiningHome'
+        waitforgump 0x59 5000
+        replygump 0x59 HomeRune[0]
+        pause 2500
+        organizer 'Mining'
+        while organizing
+          pause 1000
+        endwhile
+        // Restock while at Home
+        if @inlist 'tinkershovels' 'No' or @inlist 'tinkershovels' 'no'
+          if @inlist 'useshovels' 'No' or @inlist 'useshovels' 'no'
+            if @counttype MineTools[0] 'any' 'backpack' < numberOfToolsToCarry[0]
+              useobject 'MiningRestock'
+              pause 2000
+              if @counttype MineTools[0] 'any' 'backpack' == 0 and @counttype MineTools[0] 'any' 'MiningRestock' == 0
+                sysmsg "NEED MORE PICKS, STOPPING" errortextcolor[0]
+                if @inlist 'useHomeWalk' 'Yes' or @inlist 'useHomeWalk' 'yes'
+                  for 0 to 'homewalk'
+                    walk homewalk[]
+                  endfor
+                endif
+                stop
+              endif
+              while @counttype MineTools[0] 'any' 'backpack' < numberOfToolsToCarry[0] and @counttype MineTools[0] 'any' 'MiningRestock' > 0
+                @movetype  MineTools[0] 'MiningRestock' 'backpack' 'any' 1
+                pause 1000
+              endwhile
+            endif
+          elseif @inlist 'useshovels' 'Yes' or @inlist 'useshovels' 'yes'
+            if @counttype MineTools[1] 'any' 'backpack' < numberOfToolsToCarry[0]
+              useobject 'MiningRestock'
+              pause 2000
+              if @counttype MineTools[1] 'any' 'backpack' ==0  and @counttype MineTools[1] 'any' 'MiningRestock' == 0
+                sysmsg "NEED MORE SHOVELS, STOPPING" errortextcolor[0]
+                if @inlist 'useHomeWalk' 'Yes' or @inlist 'useHomeWalk' 'yes'
+                  for 0 to 'homewalk'
+                    walk homewalk[]
+                  endfor
+                endif
+                stop
+              endif
+              while @counttype MineTools[1] 'any' 'backpack' < numberOfToolsToCarry[0] and @counttype MineTools[1] 'any' 'MiningRestock' > 0
+                @movetype  MineTools[1] 'MiningRestock' 'backpack' 'any' 1
+                pause 1000
+              endwhile
+            endif
+          endif
+        elseif @inlist 'tinkershovels' 'Yes' or @inlist 'tinkershovels' 'yes'
+          if @counttype 0x1bf2 '0' 'backpack' < 25
+            useobject 'MiningRestock'
+            pause 2000
+            if not @findtype 0x1bf2 0x0 'MiningRestock'
+              sysmsg "NO INGOTS IN RESTOCK" errortextcolor[0]
+            endif
+            if @counttype 0x1bf2 0x0 'MiningRestock' < 25
+              sysmsg "LOW ON INGOTS IN RESTOCK" errortextcolor[0]
+              @movetype 0x1bf2 'MiningRestock' 'backpack' 0 0 0 0x0
+            else
+              @movetype 0x1bf2 'MiningRestock' 'backpack' 0 0 0 0x0 25
+            endif
+          endif
+          if @counttype 0x1bf2 0x0 'backpack' < 4
+            sysmsg "OUT OF INGOTS" errortextcolor[0]
+            if @inlist 'useHomeWalk' 'Yes' or @inlist 'useHomeWalk' 'yes'
+              for 0 to 'homewalk'
+                walk homewalk[]
+              endfor
+            endif
+            stop
+          endif
+        endif
+        if @inlist 'useprospectortool' 'Yes' or @inlist 'useprospectortool' 'yes'
+          if @counttype MineTools[2] 'any' 'backpack' < 1
+            if @counttype MineTools[2] 'any' 'MiningRestock' < 1
+              sysmsg "OUT OF PROSPECTORS TOOLS" errortextcolor[0]
+            else
+              while @counttype MineTools[2] 'any' 'backpack' < 1
+                @movetype MineTools[2] 'MiningRestock' 'backpack' 'any' 1
+                pause 1000
+              endwhile
+            endif
+          endif
+        endif
+        //msg 'Hail to RaveX the Lord of Heritage' errortextcolor[0]
+        pause 1600
+        useobject MineBook[0]
+        waitforgump 0x59 5000
+        replygump 0x59 Runes[0]
+        pause 1500
+      endif
+      if @inlist 'tinkershovels' 'Yes' or @inlist 'tinkershovels' 'yes'
+        // Make Tinker Tools
+        while @counttype MineTools[3] 'any' 'backpack' < 2
+          usetype MineTools[3] 'any' 'backpack'
+          waitforgump 0x38920abd 15000
+          replygump 0x38920abd 15
+          waitforgump 0x38920abd 15000
+          replygump 0x38920abd 23
+          pause 1500
+        endwhile
+        // Make Shovels
+        while @counttype MineTools[1] 'any' 'backpack' < 2
+          usetype MineTools[3] 'any' 'backpack'
+          waitforgump 0x38920abd 15000
+          replygump 0x38920abd 15
+          waitforgump 0x38920abd 15000
+          replygump 0x38920abd 72
+          pause 1500
+        endwhile
+        if @gumpexists 0x38920abd
+          replygump 0x38920abd 0
+        endif
+      endif
+    endwhile
+    poplist 'Runes' 'front'
+    if list 'Runes' == 0
+      poplist 'MineBook' 'front'
+    endif
+  endwhile
+endwhile
+useobject 'MiningHome'
+waitforgump 0x59 5000
+replygump 0x59 HomeRune[0]
+pause 2500
+organizer 'Mining'
+while organizing
+  pause 500
+endwhile
+pause 1000
+if @inlist 'useHomeWalk' 'Yes' or @inlist 'useHomeWalk' 'yes'
+  for 0 to 'homewalk'
+    walk homewalk[]
+  endfor
+endif

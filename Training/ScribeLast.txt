@@ -1,0 +1,15 @@
+for 229
+  usetype 0xfbf
+  waitforgump 0x38920abd 3000
+  replygump 0x38920abd 21
+  waitforgump 0x38920abd 3000
+  if mana < 40
+    while not buffexists 'Meditation'
+      useskill 'Meditation'
+      pause 1000
+    endwhile
+    while mana < maxmana
+      pause 1000
+    endwhile
+  endif
+endfor

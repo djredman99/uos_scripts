@@ -1,0 +1,4 @@
+useskill 'Arms Lore'
+waitfortarget 15000
+targettype 0xf52
+pause 1000

@@ -1,0 +1,32 @@
+while skill 'Ninjitsu' < 50
+  cast "Mirror Image"
+  pause 600
+  //getenemy 'Innocent' 'Humanoid' 'transformation' 'random'
+  //attack 'enemy'
+  pause 5400
+endwhile
+while skill 'Ninjitsu' < 100
+  while mana < 30
+    pause 1000
+  endwhile
+  // comment out if training healing too
+  while not buffexists 'Hiding'
+    useskill 'hiding'
+    pause 10500
+  endwhile
+  turn "North"
+  walk "North"
+  walk "North"
+  walk "North"
+  turn "South"
+  walk "South"
+  walk "South"
+  walk "South"
+  cast "shadowjump"
+  waitfortarget 2000
+  targettilerelative 'self' 1
+  pause 4000
+  cast "shadowjump"
+  waitfortarget 2000
+  targettilerelative 'self' -1
+endwhile

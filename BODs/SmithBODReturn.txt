@@ -1,0 +1,59 @@
+// Author: raveX
+if not @findobject 'Smith Return Destination Book'
+  sysmsg ' Select Smith Return Destination Book' 32
+  promptalias 'Smith Return Destination Book'
+endif
+if not @findobject 'Smith Return Source Book'
+  sysmsg ' Select Smith Return Source Book' 32
+  promptalias 'Smith Return Source Book'
+endif
+if not @findobject 'Trash Barrel'
+  sysmsg ' Select Trash Barrel' 32
+  promptalias 'Trash Barrel'
+endif
+if not @findobject 'Smith Npc'
+  sysmsg ' Select Npc' 32
+  promptalias 'Smith Npc'
+endif
+// Start
+if @findtype 0x2258 0x44e 'backpack'
+  feed 'Smith Npc' 0x2258
+  // pause 1000
+  waitforcontext 'Smith Npc' 1 15000
+  pause 1500
+  if @findtype 0x13d5 'any' 'backpack'
+    moveitem 'found' 'Trash Barrel'
+  endif
+  if @findtype 0xfb4 'any' 'backpack'
+    moveitem 'found' 'Trash Barrel'
+  endif
+  if @findtype 0xe85 'any' 'backpack'
+    moveitem 'found' 'Trash Barrel'
+  endif
+  if @findtype 0xe86 'any' 'backpack'
+    moveitem 'found' 'Trash Barrel'
+  endif
+  if @findtype 0xf39 'any' 'backpack'
+    moveitem 'found' 'Trash Barrel'
+  endif
+  if @findtype 0x13c6 'any' 'backpack'
+    moveitem 'found' 'Trash Barrel'
+  endif
+  pause 1500
+  organizer 'Rewards'
+  replygump 0x9bade6ea 1
+  replygump 0xbe0dad1e 1
+  pause 1000
+  //Filter
+  if @findtype 0x2258 0x44e 'backpack'
+    moveitem 'found' 'Smith Return Destination Book'
+  endif
+elseif not @property 'Deeds In Book: 0' 'Smith Return Source Book'
+  useobject! 'Smith Return Source Book'
+  waitforgump 0x54f555df 5000
+  replygump 0x54f555df 5
+  pause 1500
+else
+  stop
+endif
+pause 3000

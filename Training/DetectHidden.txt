@@ -1,0 +1,5 @@
+useskill 'Detecting Hidden'
+waitfortarget 15000
+//target! 0x40007082
+targettileoffset 0 0 0
+pause 10000

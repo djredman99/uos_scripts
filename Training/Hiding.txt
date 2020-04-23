@@ -1,0 +1,4 @@
+while skill 'Hiding' < 100
+  useskill 'Hiding'
+  pause 10500
+endwhile

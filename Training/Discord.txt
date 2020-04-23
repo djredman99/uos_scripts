@@ -1,0 +1,38 @@
+if not listexists 'MusicInstruments'
+  createlist 'MusicInstruments'
+  pushlist 'MusicInstruments' 0xe9d  //tambourine
+  pushlist 'MusicInstruments' 0xe9e  //tambourine2
+  pushlist 'MusicInstruments' 0xeb3  // flute
+  pushlist 'MusicInstruments' 0x403b  // Aud-char
+  pushlist 'MusicInstruments' 0xeb3  // lute
+  pushlist 'MusicInstruments' 0xe9c  // drum
+endif
+if not timerexists 'DiscordTimer'
+  createtimer 'DiscordTimer'
+endif
+@clearjournal
+useskill 'Discordance'
+waitfortarget 1000
+if @injournal 'instrument shall you'
+  for 0 to 'MusicInstruments'
+    if findtype MusicInstruments[] 'any' 'backpack'
+      pause 600
+      useobject 'found'
+      pause 600
+      replay
+    endif
+  endfor
+endif
+target! 0xe7a7
+pause 1000
+if @injournal 'You play jarring music' 'system'
+  @clearjournal
+  while not buffexists 'Hiding'
+    useskill 'Hiding'
+    pause 600
+  endwhile
+  settimer 'DiscordTimer' 0
+  while timer 'DiscordTimer' < 18000
+    pause 1000
+  endwhile
+endif

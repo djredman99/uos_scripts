@@ -1,0 +1,112 @@
+clearignorelist
+if list 'TailorBoxes' == 0
+  removelist 'TailorBoxes'
+  //msg 'BOXES RESET'
+endif
+// Boxes in House
+if not listexists 'TailorBoxes'
+  @createlist 'TailorBoxes'
+  // Stack 1
+  @pushlist 'TailorBoxes' 0x40952fa1
+  @pushlist 'TailorBoxes' 0x40952df9
+  @pushlist 'TailorBoxes' 0x40952a0d
+  @pushlist 'TailorBoxes' 0x40952f1f
+  // Stack 2
+  @pushlist 'TailorBoxes' 0x40952bd6
+  @pushlist 'TailorBoxes' 0x40952b08
+  @pushlist 'TailorBoxes' 0x409530a7
+  @pushlist 'TailorBoxes' 0x40952920
+  // Stack 3
+  @pushlist 'TailorBoxes' 0x409526de
+  @pushlist 'TailorBoxes' 0x40952c69
+  @pushlist 'TailorBoxes' 0x40952d46
+  @pushlist 'TailorBoxes' 0x409527d9
+  // Stack 4
+  @pushlist 'TailorBoxes' 0x4094a1bb
+  @pushlist 'TailorBoxes' 0x4094a2f0
+  @pushlist 'TailorBoxes' 0x40949d07
+  @pushlist 'TailorBoxes' 0x4094a41e
+  // Stack 5
+  //@pushlist 'TailorBoxes' 0x42a022de
+  //@pushlist 'TailorBoxes' 0x423e7f71
+  //@pushlist 'TailorBoxes' 0x42a02481
+  //@pushlist 'TailorBoxes' 0x42a020f4
+endif
+while list 'TailorBoxes' > 0
+  unsetalias 'currentboxTB'
+  unsetalias 'currentbookTB'
+  if not @findobject TailorBoxes[0]
+    sysmsg 'Cannot find BOX!!!' 0xf00
+    stop
+  endif
+  setalias 'currentboxTB' 'found'
+  while distance 'currentboxTB' > 1
+    turn 'north'
+    walk 'north'
+    pause 600
+  endwhile
+  sysmsg 'Box found' 0xf00
+  pause 1000
+  useobject 'currentboxTB'
+  pause 600
+  while @findtype 0x2259 0x0 'currentboxTB' 1 5
+    sysmsg 'Found a Book...' 0xf00
+    pause 600
+    if @property 'Deeds In Book' 'found' < 500
+      moveitem 'found' 'backpack'
+      pause 1000
+      sysmsg 'Book Found and moved' 0xf00
+    else
+      ignoreobject 'found'
+      pause 600
+    endif
+  endwhile
+  if counttype 0x2259 0x0 'backpack' > 1
+    // FIND A TARGET
+    @unsetalias 'BODTMakerTarget'
+    if @findtype 0x2259 0x0 'backpack'
+      setalias 'BODTMakerTarget' 'found'
+      ignoreobject 'found'
+    endif
+    while @findtype 0x2259 0x0 'backpack'
+      setalias 'BODTMakerSource' 'found'
+      while not property 'Deeds In Book: 500' 'BODTMakerTarget'
+        if not property 'Deeds In Book: 0' 'BODTMakerSource'
+          useobject! 'BODTMakerSource'
+          waitforgump 0x54f555df 15000
+          replygump 0x54f555df 5
+          pause 500
+          while @findtype 0x2258 'any' 'backpack'
+            moveitem 'found' 'BODTMakerTarget' 65535 65535 0
+            waitforgump 0x54f555df 2000
+          endwhile
+          pause 500
+        else
+          moveitem 'BODTMakerSource' 'currentboxTB' 126 10 0
+          pause 600
+          ignoreobject 'BODTMakerSource'
+          break
+        endif
+      endwhile
+      if property 'Deeds In Book: 500' 'BODTMakerTarget'
+        break
+      endif
+    endwhile
+    pause 600
+    moveitem 'BODTMakerSource' 'currentboxTB' 126 10 0
+    pause 600
+    moveitem 'BODTMakerTarget' 'currentboxTB' 20 10 0
+    pause 600
+    // DO
+    while @findtype 0x2259 0x0 'backpack'
+      moveitem 'found' 'currentboxTB' 126 10 0
+      pause 600
+    endwhile
+  else
+    while @findtype 0x2259 0x0 'backpack' 1 5
+      moveitem 'found' 'currentboxTB'
+    endwhile
+  endif
+  poplist 'TailorBoxes' 'front'
+endwhile
+msg "DONE"

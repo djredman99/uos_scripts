@@ -1,0 +1,16 @@
+for 100
+  movetype 0x19b9 'ground' 'backpack' 0 0 0 'any' 1 2
+  pause 600
+  while findtype 0x19b9 'any' 'backpack' 1
+    usetype 0x19b9 'any' 'backpack'
+    waitingfortarget 3000
+    //targettype 0x0fb1 'any'
+    //targetground 0x0fb1 'any' 2
+    pause 600
+    while findtype 0x19b8 'any' 'backpack' 1
+      useobject 'found'
+      //targetground 0x0fb1 'any' 2
+      pause 600
+    endwhile
+  endwhile
+endfor

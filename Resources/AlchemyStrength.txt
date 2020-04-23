@@ -1,0 +1,18 @@
+if not @findobject 'AlchyChest'
+  promptalias 'AlchyChest'
+endif
+if counttype 0xf09 0 'backpack' > 100
+  movetype 0xf09 'backpack' 'AlchyChest' 65535 65535 0
+  pause 1000
+endif
+if counttype 0xf0e 0 'backpack' < 1
+  movetype 0xf0e 'AlchyChest' 'backpack' 65535 65535 0 0 100
+  pause 1000
+endif
+usetype 0xe9b
+waitforgump 0x38920abd 1000
+replygump 0x38920abd 8
+waitforgump 0x38920abd 1000
+replygump 0x38920abd 30
+waitforgump 0x38920abd 1000
+pause 1000

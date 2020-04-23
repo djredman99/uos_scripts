@@ -1,0 +1,34 @@
+clearjournal
+while not buffexists 'Hiding'
+  useskill 'hiding'
+  pause 1000
+endwhile
+if skill 'stealth' < 100
+  //  while not @injournal 'You fail in your attempt'
+  //    clearjournal
+  //    while not @injournal 'You have hidden'
+  //      useskill 'hiding'
+  //      pause 1000
+  //    endwhile
+  //    clearjournal
+  //  endif
+  //pause 10500
+  useskill 'stealth'
+  turn 'east'
+  walk 'east'
+  walk 'east'
+  walk 'east'
+  walk 'east'
+  walk 'east'
+  walk 'east'
+  turn 'west'
+  walk 'west'
+  walk 'west'
+  walk 'west'
+  walk 'west'
+  walk 'west'
+  walk 'west'
+else
+  useskill 'hiding'
+  pause 10500
+endif

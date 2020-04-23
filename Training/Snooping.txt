@@ -1,0 +1,2 @@
+useobject 0x4167601c
+pause 250

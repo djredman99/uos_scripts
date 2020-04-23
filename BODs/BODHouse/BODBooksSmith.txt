@@ -1,0 +1,107 @@
+clearignorelist
+if list 'SmithBoxes' == 0
+  removelist 'SmithBoxes'
+endif
+// Boxes in House
+if not listexists 'SmithBoxes'
+  @createlist 'SmithBoxes'
+  // Stack 1
+  @pushlist 'SmithBoxes' 0x40949b5b
+  @pushlist 'SmithBoxes' 0x40949a0d
+  @pushlist 'SmithBoxes' 0x4094f26b
+  @pushlist 'SmithBoxes' 0x4094ed89
+  // Stack 2
+  @pushlist 'SmithBoxes' 0x4094a6e4
+  @pushlist 'SmithBoxes' 0x40949f38
+  @pushlist 'SmithBoxes' 0x4097c845
+  @pushlist 'SmithBoxes' 0x40949902
+  // Stack 3
+  @pushlist 'SmithBoxes' 0x4094daa7
+  @pushlist 'SmithBoxes' 0x4094a528
+  @pushlist 'SmithBoxes' 0x4094a028
+  @pushlist 'SmithBoxes' 0x4094d9ce
+  // Stack 4
+  @pushlist 'SmithBoxes' 0x40949df1
+  @pushlist 'SmithBoxes' 0x4094d7ec
+  @pushlist 'SmithBoxes' 0x4094d915
+  @pushlist 'SmithBoxes' 0x4094d710
+  // Stack 5
+  //@pushlist 'SmithBoxes' 0x42a0a893
+  //@pushlist 'SmithBoxes' 0x42a0a9d6
+  //@pushlist 'SmithBoxes' 0x42a02d65
+  //@pushlist 'SmithBoxes' 0x42a02e32
+endif
+while list 'SmithBoxes' > 0
+  closegump 'container' 'currentbookSB'
+  unsetalias 'currentboxSB'
+  if not @findobject SmithBoxes[0]
+    sysmsg 'Cannot find BOX!!!' 0xf00
+    stop
+  endif
+  setalias 'currentboxSB' 'found'
+  while distance 'currentboxSB' > 1
+    turn 'north'
+    walk 'north'
+    pause 600
+  endwhile
+  sysmsg 'Box found' 0xf00
+  pause 1000
+  useobject 'currentboxSB'
+  pause 600
+  while @findtype 0x2259 0x0 'currentboxSB' 1 5
+    sysmsg 'Found a Book...' 0xf00
+    pause 600
+    if @property 'Deeds In Book' 'found' < 500
+      moveitem 'found' 'backpack'
+      pause 1000
+      sysmsg 'Book Found and moved' 0xf00
+    else
+      ignoreobject 'found'
+      pause 600
+    endif
+  endwhile
+  if counttype 0x2259 0x0 'backpack' > 1
+    // FIND A TARGET
+    @unsetalias 'BODMakerTargetS'
+    if @findtype 0x2259 0x0 'backpack'
+      setalias 'BODMakerTargetS' 'found'
+      ignoreobject 'found'
+    endif
+    while @findtype 0x2259 0x0 'backpack'
+      setalias 'BODMakerSourceS' 'found'
+      while not property 'Deeds In Book: 500' 'BODMakerTargetS'
+        if not property 'Deeds In Book: 0' 'BODMakerSourceS'
+          useobject! 'BODMakerSourceS'
+          waitforgump 0x54f555df 15000
+          replygump 0x54f555df 5
+          pause 500
+          while @findtype 0x2258 'any' 'backpack'
+            moveitem 'found' 'BODMakerTargetS' 65535 65535 0
+            waitforgump 0x54f555df 2000
+          endwhile
+          pause 500
+        else
+          moveitem 'BODMakerSourceS' 'currentboxSB' 126 10 0
+          pause 600
+          ignoreobject 'BODMakerSourceS'
+          break
+        endif
+      endwhile
+      if property 'Deeds In Book: 500' 'BODMakerTargetS'
+        break
+      endif
+    endwhile
+    pause 600
+    clearignorelist
+    while @findtype 0x2259 0x0 'backpack'
+      moveitem 'found' 'currentboxSB' 126 10 0
+      pause 600
+    endwhile
+  else
+    while @findtype 0x2259 0x0 'backpack' 1 5
+      moveitem 'found' 'currentboxSB'
+    endwhile
+  endif
+  poplist 'SmithBoxes' 'front'
+endwhile
+msg "DONE"

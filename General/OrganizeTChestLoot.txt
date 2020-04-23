@@ -1,0 +1,60 @@
+while findtype 0xe40 'any' 'backpack'
+  organizer 'T-Chest Gems' 'found' 0x423bf2c7
+  waitforjournal 'No more items' 9000
+  clearjournal
+  organizer 'T-Chest Regs' 'found' 0x423bf193
+  waitforjournal 'No more items' 9000
+  clearjournal
+  organizer 'T-Chest Scrolls' 'found' 0x40307afa
+  waitforjournal 'No more items' 9000
+  clearjournal
+  organizer 'T-Chest Maps' 'found' 0x404c087c
+  waitforjournal 'No more items' 3000
+  clearjournal
+  ignoreobject 'found'
+endwhile
+while findtype 0xe7c 'any' 'backpack'
+  organizer 'T-Chest Gems' 'found' 0x423bf2c7
+  waitforjournal 'No more items' 9000
+  clearjournal
+  organizer 'T-Chest Regs' 'found' 0x423bf193
+  waitforjournal 'No more items' 9000
+  clearjournal
+  organizer 'T-Chest Scrolls' 'found' 0x40307afa
+  waitforjournal 'No more items' 9000
+  clearjournal
+  organizer 'T-Chest Maps' 'found' 0x404c087c
+  waitforjournal 'No more items' 3000
+  clearjournal
+  ignoreobject 'found'
+endwhile
+while findtype 0xe41 'any' 'backpack'
+  organizer 'T-Chest Gems' 'found' 0x423bf2c7
+  waitforjournal 'No more items' 9000
+  clearjournal
+  organizer 'T-Chest Regs' 'found' 0x423bf193
+  waitforjournal 'No more items' 9000
+  clearjournal
+  organizer 'T-Chest Scrolls' 'found' 0x40307afa
+  waitforjournal 'No more items' 9000
+  clearjournal
+  organizer 'T-Chest Maps' 'found' 0x404c087c
+  waitforjournal 'No more items' 3000
+  clearjournal
+  ignoreobject 'found'
+endwhile
+while findtype 0x9ab 'any' 'backpack'
+  organizer 'T-Chest Gems' 'found' 0x423bf2c7
+  waitforjournal 'No more items' 9000
+  clearjournal
+  organizer 'T-Chest Regs' 'found' 0x423bf193
+  waitforjournal 'No more items' 9000
+  clearjournal
+  organizer 'T-Chest Scrolls' 'found' 0x40307afa
+  waitforjournal 'No more items' 9000
+  clearjournal
+  organizer 'T-Chest Maps' 'found' 0x404c087c
+  waitforjournal 'No more items' 3000
+  clearjournal
+  ignoreobject 'found'
+endwhile

@@ -1,0 +1,32 @@
+if not @findalias 'CookingRestock'
+  promptalias 'CookingRestock'
+endif
+if @findtype 0x97b 0 'backpack'
+  if counttype 0x97b 0 'backpack' > 100
+    movetype  0x97b 'backpack' 'CookingRestock' 65535 65535 0 'all'
+    pause 500
+  endif
+endif
+if @findtype 0x97f 0 'backpack'
+  pause 600
+  @setalias 'skillet' 'found'
+  if not @findtype 0x97a 0 'backpack'
+    movetype 0x97a 'CookingRestock' 'backpack' 65000 65000 0 0 1
+    pause 600
+  endif
+  useobject! 'skillet'
+  waitforgump 0x38920abd 15000
+  replygump 0x38920abd 22
+  waitforgump 0x38920abd 15000
+  replygump 0x38920abd 16
+  waitforgump 0x38920abd 15000
+else
+  while counttype 0x97f 0x0 'backpack' < 5
+    usetype 0x1eb8 0x0 'backpack'
+    waitforgump 0x38920abd 3000
+    replygump 0x38920abd 8
+    waitforgump 0x38920abd 3000
+    replygump 0x38920abd 128
+    waitforgump 0x38920abd 3000
+  endwhile
+endif

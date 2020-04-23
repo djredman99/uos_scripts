@@ -1,0 +1,279 @@
+turn 'NorthWest'
+msg 'Oh Baby' 33
+pause 1000
+msg 'Ive got' 33
+pause 1000
+msg 'something special' 33
+pause 1000
+msg 'planned' 33
+pause 1000
+msg 'for you' 33
+pause 1000
+msg 'Lets GO' 23
+pause 1200
+turn 'SouthEast'
+msg 'We' 53
+pause 200
+turn 'SouthWest'
+pause 200
+turn 'NorthEast'
+msg 'can boogie' 53
+turn 'NorthWest'
+pause 700
+msg 'down' 53
+turn 'South'
+pause 700
+turn 'SouthWest'
+msg 'DOWN' 23
+turn 'NorthEast'
+pause 100
+msg 'ca-MON' 53
+turn 'SouthWest'
+pause 400
+msg 'down' 53
+pause 700
+for 2
+  msg 'the BOOGIE' 43
+  turn 'SouthWest'
+  pause 400
+  turn 'NorthEast'
+  pause 300
+  turn 'SouthWest'
+  pause 300
+  msg 'down' 53
+  pause 800
+  warmode 'on'
+  msg 'DOWN' 23
+  pause 600
+  msg 'ca-MON' 53
+  warmode 'off'
+  pause 300
+  turn 'NorthEast'
+  pause 400
+  msg 'down' 53
+  pause 600
+endfor
+msg 'the BOOGIE' 53
+turn 'SouthWest'
+pause 400
+turn 'NorthEast'
+pause 200
+turn 'SouthWest'
+pause 300
+msg 'down' 53
+pause 600
+turn 'NorthWest'
+msg 'DOWN' 53
+turn 'SouthEast'
+pause 100
+turn 'NorthWest'
+msg 'Lets' 53
+walk 'NorthWest'
+pause 50
+turn 'SouthEast'
+msg 'GROOVE' 23
+walk 'SouthEast'
+pause 50
+msg 'tonight' 53
+turn 'West'
+pause 400
+turn 'SouthWest'
+pause 300
+turn 'South'
+pause 300
+turn 'SouthEast'
+pause 300
+turn 'East'
+pause 300
+turn 'NorthEast'
+pause 200
+turn 'South'
+pause 300
+msg 'Share the' 53
+turn 'SouthWest'
+pause 300
+msg 'SPICE' 43
+turn 'NorthEast'
+pause 200
+msg 'of LIFE' 53
+turn 'SouthWest'
+pause 300
+turn 'NorthEast'
+pause 300
+turn 'SouthWest'
+pause 300
+turn 'NorthEast'
+pause 300
+turn 'SouthWest'
+pause 200
+turn 'NorthWest'
+pause 200
+turn 'NorthEast'
+pause 200
+msg 'BABY' 43
+turn 'SouthWest'
+pause 300
+msg 'slice' 53
+turn 'NorthEast'
+pause 300
+msg 'it RIGHT' 53
+turn 'SouthWest'
+pause 300
+turn 'West'
+pause 300
+turn 'NorthWest'
+pause 300
+turn 'North'
+pause 300
+turn 'NorthEast'
+pause 300
+turn 'East'
+pause 800
+turn 'SouthWest'
+msg 'Were gonna' 53
+walk 'SouthWest'
+pause 200
+turn 'NorthEast'
+msg 'GROOVE' 23
+walk 'NorthEast'
+turn 'SouthWest'
+msg 'TOO-night' 43
+pause 300
+turn 'SouthEast'
+pause 300
+turn 'NorthEast'
+pause 300
+msg '.'
+turn 'West'
+pause 300
+turn 'East'
+pause 300
+msg '.'
+turn 'NorthEast'
+pause 300
+msg '.'
+turn 'SouthWest'
+pause 50
+msg '.'
+turn 'SouthEast'
+pause 150
+msg '.'
+turn 'South'
+pause 150
+msg 'Let this' 53
+pause 200
+turn 'SouthEast'
+pause 50
+msg 'GROOVE' 23
+walk 'SouthEast'
+pause 50
+turn 'South'
+msg 'get you' 53
+pause 50
+turn 'East'
+pause 50
+msg 'to' 53
+turn 'North'
+pause '50
+msg 'move' 63
+pause 300
+turn 'SouthEast'
+pause 300
+msg 'Its alright' 53
+turn 'SouthWest'
+pause 1100
+msg 'ALRIGHT' 43
+turn 'NorthWest'
+pause 200
+walk 'NorthWest'
+pause 300
+turn 'NorthEast'
+pause 300
+turn 'SouthWest'
+pause 300
+msg 'Allll-right' 53
+turn 'NorthWest'
+pause 300
+turn 'NorthEast'
+pause 200
+turn 'SouthEast'
+pause 200
+turn 'East'
+pause 200
+turn 'NorthEast'
+pause 200
+turn 'North'
+pause 400
+msg 'Let this groove' 53
+turn 'SouthWest'
+pause 300
+turn 'NorthEast'
+pause 300
+turn 'NorthWest'
+pause 400
+msg 'set in' 53
+turn 'West'
+pause 300
+msg 'your' 53
+pause 300
+turn 'SouthWest'
+msg 'SHOES' 53
+pause 200
+warmode 'on'
+pause 200
+msg 'So' 53
+pause 500
+msg 'STAND' 43
+pause 400
+msg 'UP' 53
+pause 300
+warmode 'off'
+turn 'North'
+pause 200
+turn 'SouthWest'
+msg 'ALRIGHT' 43
+pause 200
+turn 'SouthEast'
+pause 50
+walk 'SouthEast'
+pause 50
+turn 'SouthWest'
+msg 'Allright' 53
+pause 300
+turn 'NorthEast'
+pause 200
+turn 'SouthWest'
+pause 300
+turn 'SouthEast'
+pause 300
+turn 'NorthEast'
+pause 300
+msg '.'
+turn 'West'
+pause 300
+turn 'NorthWest'
+pause 300
+msg '.' 53
+turn 'North'
+pause 300
+msg '.' 42
+turn 'NorthEast'
+pause 300
+msg '.' 32
+turn 'East'
+pause 50
+undress 'Lets Groove'
+msg '.' 23
+turn 'SouthEast'
+pause 50
+msg '.' 21
+turn 'South'
+pause 50
+turn 'North'
+pause 8000
+msg 'Just...' 53
+pause 500
+msg 'Dancing' 53
+msg ':|' 53
+pause 8000
+playsound 'sheep3.wav'

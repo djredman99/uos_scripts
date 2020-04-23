@@ -1,0 +1,6 @@
+while skill 'Animal Lore' < 109
+  useskill 'Animal Lore'
+  waitfortarget 15000
+  target! 0x43cc4
+  pause 1000
+endwhile

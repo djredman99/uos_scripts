@@ -1,0 +1,200 @@
+// **********************************
+//Script Name: Master Lumberjacking
+//Author:  raveX
+//Version: 1.2
+// **********************************
+// ******************************
+// CLEAR User option lists
+// ******************************
+@clearlist 'textcolor'
+@clearlist 'errortextcolor'
+@clearlist 'weightlimit'
+@clearlist 'useRedDefense'
+@clearlist 'useHomeWalk'
+//
+@createlist 'textcolor'
+@createlist 'errortextcolor'
+@createlist 'weightlimit'
+@createlist 'useRedDefense'
+@createlist 'useHomeWalk'
+//
+// ******************************
+// User options (Yes/yes or No/no)
+// ******************************
+// Will call guards in guarded region or recall home if a murderer is near
+pushlist 'useRedDefense' 'Yes'
+// Set to yes if you want to use the routine to walk into home/secuire location
+// This will occur at the end of macro or a stopping condition that brings
+// you back homw
+pushlist 'useHomeWalk' 'Yes'
+// ******************************
+// User options (integers)
+// ******************************
+// System Message colors
+pushlist 'textcolor' '43'
+pushlist 'errortextcolor' '33'
+// Weight threshold where you should recall home and unload
+// This should be less than your max carry weight
+pushlist 'weightlimit' '480'
+// ******************************
+// Setup RuneBooks
+// ******************************
+if not @findobject 'LumberBookOne'
+  promptalias 'LumberBookOne'
+endif
+if not @findobject 'LumberBookTwo'
+  promptalias 'LumberBookTwo'
+endif
+if not @findobject 'LumberBookThree'
+  promptalias 'LumberBookThree'
+endif
+if not @findobject 'LumberBookFour'
+  promptalias 'LumberBookFour'
+endif
+if not @findobject 'LumberBookFive'
+  promptalias 'LumberBookFive'
+endif
+if not @findobject 'Home'
+  promptalias 'Home'
+endif
+if not @findobject 'myAxe'
+  promptalias 'myAxe'
+endif
+if not listexists 'TreeBook'
+  createlist 'TreeBook'
+  pushlist 'TreeBook' 'LumberBookOne'
+  pushlist 'TreeBook' 'LumberBookTwo'
+  pushlist 'TreeBook' 'LumberBookThree'
+  pushlist 'TreeBook' 'LumberBookFour'
+  pushlist 'TreeBook' 'LumberBookFive'
+endif
+if not listexists 'Runes'
+  createlist 'Runes'
+  pushlist 'Runes' 50
+  pushlist 'Runes' 51
+  pushlist 'Runes' 52
+  pushlist 'Runes' 53
+  pushlist 'Runes' 54
+  pushlist 'Runes' 55
+  pushlist 'Runes' 56
+  pushlist 'Runes' 57
+  pushlist 'Runes' 58
+  pushlist 'Runes' 59
+  pushlist 'Runes' 60
+  pushlist 'Runes' 61
+  pushlist 'Runes' 62
+  pushlist 'Runes' 63
+  pushlist 'Runes' 64
+  pushlist 'Runes' 65
+endif
+// ******************************
+// Setup Axe List
+// ******************************
+if not listexists 'AxeList'
+  createlist 'AxeList'
+  @pushlist 'AxeList' 0xf43  // Hatchet
+  @pushlist 'AxeList' 0xf45  // Executioner
+  @pushlist 'AxeList' 0xf47  // Battle
+  @pushlist 'AxeList' 0xf49  // Axe
+  @pushlist 'AxeList' 0xf4b  // Double
+  @pushlist 'AxeList' 0x13fb // Large Battle
+  @pushlist 'AxeList' 0x1443 // Two Handed
+endif
+// ******************************
+// Setup Walk routine
+// ******************************
+// This is used to walk into your house/secure location after
+// recalling home at the end of the macro or in a stopping condition
+// Set a path from your home recall location to your final stopping position
+if not @listexists 'homewalk'
+  @createlist 'homewalk'
+endif
+@clearlist 'homewalk'
+pushlist 'homewalk' 'north'
+pushlist 'homewalk' 'north'
+pushlist 'homewalk' 'north'
+pushlist 'homewalk' 'north'
+pushlist 'homewalk' 'north'
+pushlist 'homewalk' 'north'
+pushlist 'homewalk' 'north'
+pushlist 'homewalk' 'north'
+pushlist 'homewalk' 'north'
+// ******************************
+// Start Recall Cycle
+// ******************************
+for 0 to 'TreeBook'
+  for 0 to 'Runes'
+    clearjournal
+    useobject TreeBook[]
+    waitforgump 0x59 5000
+    replygump 0x59 Runes[]
+    pause 1500
+    //if @injournal 'That location is blocked''system'
+    //break
+    //endif
+    while not @injournal 'enough wood here''system'
+      pause 600
+      if not @findobject 'LeftHand'
+        equipitem 'myAxe' 2
+      endif
+      if @findtype 0x1bdd 'any' 'backpack'
+        useobject 'LeftHand'
+        waitfortarget 1000
+        target 'found'
+      else
+        useobject 'LeftHand'
+        waitfortarget 1000
+        targettileoffset -1 0 0
+      endif
+      // Weight Check
+      if weight > weightlimit[0]
+        while @findtype 0x1bdd 'any' 'backpack'
+          useobject 'LeftHand'
+          waitfortarget 1000
+          target 'found'
+          pause 500
+        endwhile
+        @cleartargetqueue
+        @canceltarget
+        useobject 'Home'
+        waitforgump 0x59 5000
+        replygump 0x59 Runes[0]
+        pause 2500
+        organizer 'Boards'
+        while organizing
+          pause 500
+        endwhile
+        pause 1000
+        useobject TreeBook[]
+        waitforgump 0x59 5000
+        replygump 0x59 Runes[]
+        pause 1500
+      endif
+      if @injournal 'use an axe''system'
+        break
+      endif
+    endwhile
+    pause 500
+    // This drops normal boards 1 tile south of you if you
+    // become overweight to prevent the script getting stuck trying
+    // to recall.
+    if weight > maxweight
+      movetypeoffset 0x1bd7 'backpack' 'ground' 0 1 0 0
+      pause 1000
+    endif
+  endfor
+endfor
+useobject 'Home'
+waitforgump 0x59 5000
+replygump 0x59 50
+pause 2500
+organizer 'Boards'
+while organizing
+  pause 500
+endwhile
+pause 1000
+if @inlist 'useHomeWalk' 'Yes' or @inlist 'useHomeWalk' 'yes'
+  for 0 to 'homewalk'
+    walk homewalk[]
+  endfor
+endif

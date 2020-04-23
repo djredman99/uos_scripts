@@ -1,0 +1,17 @@
+while skill 'Chivalry' < 110
+  if skill 'Chivalry' < 45
+    cast 'Consecrate Weapon'
+  elseif skill 'Chivalry' < 63
+    cast 'Divine Fury'
+  elseif skill 'Chivalry' < 80
+    cast 'Enemy of One'
+  elseif skill 'Chivalry' < 95
+    cast 'Holy Light'
+  elseif skill 'Chivalry' < 115
+    cast 'Noble Sacrifice'
+  endif
+  while mana < 20
+    pause 500
+  endwhile
+  pause 1000
+endwhile

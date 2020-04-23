@@ -1,0 +1,742 @@
+// Author: raveX
+// Description: Tailoring BOD Filler
+if not @findobject 'Tailor BOD Source'
+  promptalias 'Tailor BOD Source'
+endif
+if not @findobject 'Tailor BOD Destination'
+  promptalias 'Tailor BOD Destination'
+endif
+if not @findobject 'Tailor Restock'
+  promptalias 'Tailor Restock'
+endif
+if not @findobject 'Smith Tailor Restock'
+  promptalias 'Smith Tailor Restock'
+endif
+if not listexists 'TailorItems'
+  @createlist 'TailorItems'
+endif
+// Craft Info
+if not listexists 'CraftInfo'
+  @createlist 'CraftInfo'
+  // Hats
+  @pushlist 'CraftInfo' 0x1544
+  @pushlist 'CraftInfo' 0x1540
+  @pushlist 'CraftInfo' 0x1713
+  @pushlist 'CraftInfo' 0x1715
+  @pushlist 'CraftInfo' 0x1714
+  @pushlist 'CraftInfo' 0x1716
+  @pushlist 'CraftInfo' 0x1717
+  @pushlist 'CraftInfo' 0x1718
+  @pushlist 'CraftInfo' 0x1719
+  @pushlist 'CraftInfo' 0x171a
+  @pushlist 'CraftInfo' 0x171b
+  @pushlist 'CraftInfo' 0x171c
+  @pushlist 'CraftInfo' 0x2306
+  // Shirts
+  @pushlist 'CraftInfo' 0x1f7b
+  @pushlist 'CraftInfo' 0x1efd
+  @pushlist 'CraftInfo' 0x2310
+  @pushlist 'CraftInfo' 0x1517
+  @pushlist 'CraftInfo' 0x1fa1
+  @pushlist 'CraftInfo' 0x1ffd
+  @pushlist 'CraftInfo' 0x1f01
+  @pushlist 'CraftInfo' 0x1f00
+  @pushlist 'CraftInfo' 0x1515
+  @pushlist 'CraftInfo' 0x1f03
+  @pushlist 'CraftInfo' 0x1f9f
+  @pushlist 'CraftInfo' 0x230a
+  @pushlist 'CraftInfo' 0x230e
+  // Pants
+  @pushlist 'CraftInfo' 0x152e
+  @pushlist 'CraftInfo' 0x1539
+  @pushlist 'CraftInfo' 0x1537
+  @pushlist 'CraftInfo' 0x1516
+  // Miscellaneous
+  @pushlist 'CraftInfo' 0x1541
+  @pushlist 'CraftInfo' 0x153b
+  @pushlist 'CraftInfo' 0x153d
+  // Footwear
+  @pushlist 'CraftInfo' 0x2307
+  @pushlist 'CraftInfo' 0x1711
+  // Leather
+  @pushlist 'CraftInfo' 0x13c7
+  @pushlist 'CraftInfo' 0x1db9
+  @pushlist 'CraftInfo' 0x13c6
+  @pushlist 'CraftInfo' 0x13cd
+  @pushlist 'CraftInfo' 0x13cb
+  @pushlist 'CraftInfo' 0x13cc
+  // Studded
+  @pushlist 'CraftInfo' 0x13d6
+  @pushlist 'CraftInfo' 0x13d5
+  @pushlist 'CraftInfo' 0x13dc
+  @pushlist 'CraftInfo' 0x13da
+  @pushlist 'CraftInfo' 0x13db
+  // Female Armor
+  @pushlist 'CraftInfo' 0x1c00
+  @pushlist 'CraftInfo' 0x1c08
+  @pushlist 'CraftInfo' 0x1c0a
+  @pushlist 'CraftInfo' 0x1c0c
+  @pushlist 'CraftInfo' 0x1c06
+  @pushlist 'CraftInfo' 0x1c02
+endif
+// Search for a Tailoring BOD to fill
+if @findtype 0x2258 0x483 'backpack'
+  @setalias 'bod' 'found'
+  useobject! 'bod'
+  waitforgump 0x5afbd742 3000
+  // Combine
+  if not targetexists 'server'
+    replygump 0x5afbd742 2
+    waitforgump 0x5afbd742 3000
+    waitfortarget 5000
+  endif
+  // Check for sewing kits
+  if @findtype 0xf9d 0 'backpack'
+    pause 1500
+    @setalias 'sewing kit' 'found'
+    useobject! 'sewing kit'
+    waitforgump 0x38920abd 3000
+    // Craft
+    while targetexists 'server'
+      @clearlist 'TailorItems'
+      if @injournal 'The world will save'
+        clearjournal
+        sysmsg 'Pausing macro for Server Save'
+        waitforjournal 'World save complete' 20000 'system'
+        sysmsg 'Resuming macro'
+      endif
+      if not @ingump 0x5afbd742 'leather' and not @ingump 0x5afbd742 'studded'
+        // Check for cut cloths
+        if @counttype 0x1766 'any' 'backpack' < 50 and @counttype 0x1767 'any' 'backpack' < 50
+          if movetype 0x1766 'Tailor Restock' 'backpack' 0 0 0 0x0 200
+            pause 1500
+          elseif movetype 0x1767 'Tailor Restock' 'backpack' 0 0 0 0 200
+            pause 1500
+          else
+            sysmsg 'Out of cloths!' 25
+            @canceltarget
+            stop
+          endif
+        endif
+        // Hats
+        if @ingump 0x5afbd742 'skullcap'
+          replygump 0x38920abd 1
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 2
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[0] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'bandana'
+          replygump 0x38920abd 1
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 9
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[1] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'floppy hat'
+          replygump 0x38920abd 1
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 16
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[2] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'cap'
+          replygump 0x38920abd 1
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 23
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[3] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'wide-brim hat'
+          replygump 0x38920abd 1
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 30
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[4] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'tall straw hat'
+          replygump 0x38920abd 1
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 44
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[5] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'straw hat'
+          replygump 0x38920abd 1
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 37
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[6] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 "wizard's hat"
+          replygump 0x38920abd 1
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 51
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[7] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'bonnet'
+          replygump 0x38920abd 1
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 58
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[8] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'feathered hat'
+          replygump 0x38920abd 1
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 65
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[9] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'tricorne hat'
+          replygump 0x38920abd 1
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 72
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[10] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'jester hat'
+          replygump 0x38920abd 1
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 79
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[11] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'flower garland'
+          replygump 0x38920abd 1
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 86
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[12] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+          // Shirts
+        elseif @ingump 0x5afbd742 'doublet'
+          replygump 0x38920abd 8
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 2
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[13] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'fancy shirt'
+          replygump 0x38920abd 8
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 16
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[14] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'formal shirt'
+          replygump 0x38920abd 8
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 86
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[15] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'shirt'
+          replygump 0x38920abd 8
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 9
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[16] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'tunic'
+          replygump 0x38920abd 8
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 23
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[17] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'surcoat'
+          replygump 0x38920abd 8
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 30
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[18] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'plain dress'
+          replygump 0x38920abd 8
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 37
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[19] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'fancy dress'
+          replygump 0x38920abd 8
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 44
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[20] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'cloak'
+          replygump 0x38920abd 8
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 51
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[21] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'robe'
+          replygump 0x38920abd 8
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 58
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[22] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'jester suit'
+          replygump 0x38920abd 8
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 65
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[23] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'fur cape'
+          replygump 0x38920abd 8
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 72
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[24] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'gilded dress'
+          replygump 0x38920abd 8
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 79
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[25] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+          // Pants
+        elseif @ingump 0x5afbd742 'short pants'
+          replygump 0x38920abd 15
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 2
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[26] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'long pants'
+          replygump 0x38920abd 15
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 9
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[27] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'kilt'
+          replygump 0x38920abd 15
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 16
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[28] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'skirt'
+          replygump 0x38920abd 15
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 23
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[29] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+          // Miscellaneous
+        elseif @ingump 0x5afbd742 'body sash'
+          replygump 0x38920abd 22
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 2
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[30] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'half apron'
+          replygump 0x38920abd 22
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 9
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[31] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'full apron'
+          replygump 0x38920abd 22
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 16
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[32] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+          // Footwear
+        elseif @ingump 0x5afbd742 'fur boots'
+          replygump 0x38920abd 29
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 2
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[33] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        else if @ingump 0x5afbd742 'thigh boots'
+          replygump 0x38920abd 29
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 51
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[34] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        else
+          @unsetalias 'found'
+        endif
+      else
+        // Check for leathers
+        if @counttype 0x1081 'any' 'backpack' < 50
+          if @movetype 0x1081 'Tailor Restock' 'backpack' 0 0 0 0 100
+            pause 1500
+          else
+            sysmsg 'Out of leathers!' 25
+            @canceltarget
+            stop
+          endif
+        endif
+        // Leather
+        if @ingump 0x5afbd742 'leather gorget'
+          replygump 0x38920abd 36
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 23
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[35] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'leather cap'
+          replygump 0x38920abd 36
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 30
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[36] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'leather gloves'
+          replygump 0x38920abd 36
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 37
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[37] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'leather sleeves'
+          replygump 0x38920abd 36
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 44
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[38] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'leather leggings'
+          replygump 0x38920abd 36
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 51
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[39] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'leather tunic'
+          replygump 0x38920abd 36
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 58
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[40] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+          // Studded
+        elseif @ingump 0x5afbd742 'studded gorget'
+          replygump 0x38920abd 43
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 2
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[41] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'studded gloves'
+          replygump 0x38920abd 43
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 9
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[42] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'studded sleeves'
+          replygump 0x38920abd 43
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 16
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[43] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'studded leggings'
+          replygump 0x38920abd 43
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 23
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[44] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'studded tunic'
+          replygump 0x38920abd 43
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 30
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[45] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+          // Female Armor
+        elseif @ingump 0x5afbd742 'leather shorts'
+          replygump 0x38920abd 50
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 2
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[46] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'leather skirt'
+          replygump 0x38920abd 50
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 9
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[47] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'leather bustier'
+          replygump 0x38920abd 50
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 16
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[48] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'studded bustier'
+          replygump 0x38920abd 50
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 23
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[49] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'female leather armor'
+          replygump 0x38920abd 50
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 30
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[50] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'studded armor'
+          replygump 0x38920abd 50
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 37
+          waitforgump 0x38920abd 3000
+          pause 250
+          while @findtype CraftInfo[51] 'any' 'backpack'
+            pushlist 'TailorItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        else
+          @unsetalias 'found'
+        endif
+      endif
+      // loop through all found items of current type in backpack
+      while list 'TailorItems' > 0
+        clearignorelist
+        @findobject TailorItems[0]
+        pause 250
+        target! 'found'
+        waitfortarget 1000
+        if not targetexists and @injournal 'must be exceptional' 'system'
+          // Recycle this item
+          if usetype! 0xf9f
+            waitfortarget 5000
+            target! 'found'
+            pause 1500
+          endif
+          // Unable to recycle, trash item
+          if @findobject 'found'
+            @moveitem! 'found' 'Trash Barrel'
+            pause 1500
+          endif
+          replygump 0x5afbd742 2
+          waitforgump 0x5afbd742 3000
+          waitfortarget 5000
+          clearjournal
+        endif
+        poplist 'TailorItems' 'front'
+        pause 250
+      endwhile
+      // Check for sewing kit before craft
+      if not @findobject 'sewing kit'
+        break
+      endif
+    endwhile
+    // BOD is complete, move to destination
+    if not targetexists 'server'
+      @moveitem 'bod' 'Tailor BOD Destination'
+    endif
+    pause 1500
+    // Out of sewing kits
+  elseif @movetype 0xf9d 'Tailor Restock' 'backpack'
+    pause 1500
+  else
+    if counttype 0x1eb8 0x0 'backpack' < 2
+      while counttype 0x1eb8 0x0 'backpack' < 2
+        if not counttype 0x1bf2 0x0 'backpack' > 2
+          pause 2000
+          useobject 'Smith Tailor Restock'
+          pause 1000
+          movetype 0x1bf2 'Smith Tailor Restock' 'backpack' 0 0 0 0x0 100 3
+          pause 2000
+          sysmsg 'Tailor Restocked Ingots'
+        endif
+        usetype 0x1eb8 0x0 'backpack'
+        waitforgump 0x38920abd 3000
+        replygump 0x38920abd 23
+        pause 1500
+      endwhile
+    endif
+    while counttype 0xf9d 0x0 'backpack' < 5
+      usetype 0x1eb8 0x0 'backpack'
+      waitforgump 0x38920abd 3000
+      replygump 0x38920abd 8
+      waitforgump 0x38920abd 3000
+      replygump 0x38920abd 44
+      waitforgump 0x38920abd 3000
+    endwhile
+  endif
+elseif not property 'Deeds In Book: 0' 'Tailor BOD Source'
+  useobject! 'Tailor BOD Source'
+  waitforgump 0x54f555df 3000
+  replygump 0x54f555df 5
+  pause 1500
+else
+  sysmsg 'Unable to find BODs to fill.' 64
+  @canceltarget
+  stop
+endif

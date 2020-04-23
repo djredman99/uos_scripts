@@ -1,0 +1,44 @@
+//DO NOT LOOP THIS MACRO, SET IT TO A HOTKEY, STAND SOUTH OF ANY TREE, AND PRESS THE HOTKEY
+//IT WILL MINE UNTIL THE TREE IS EMPTY. GO SOUTH OF A NEW TREE AND REPEAT. ENJOY!
+//Script created by Ruined1 and Addicted of UOImmortalis.
+//
+//Check if there is a hatchet in hand and equip one if any in pack.
+if not findobject 'lefthand'
+  if @findtype 0xf43 'any' 'backpack'
+    equipitem 'found' 2
+  else
+    sysmsg 'You have run out of hatchets!' 24
+  endif
+endif
+//While there is still wood to cut, cut wood
+while not @injournal 'enough wood'
+  useobject 'lefthand'
+  waitfortarget 2500
+  targettileoffset 0 -1 0
+  pause 2000
+  //Check if there is still a hatchet equipped, in case it broke get another
+  if not findobject 'lefthand'
+    if @findtype 0xf43 'any' 'backpack'
+      equipitem 'found' 2
+    else
+      sysmsg 'You have run out of hatchets!' 24
+    endif
+  endif
+  if weight > 500
+    while @findtype '0x1bdd' 'any' 'backpack'
+      autotargetobject 'found'
+      useobject 'lefthand'
+      pause 600
+    endwhile
+  endif
+endwhile
+msg 'DONE!!!!' 0x011
+sysmsg 'DONE' 0x011
+@clearjournal
+//Cut logs into boards.
+while @findtype '0x1bdd' 'any' 'backpack'
+  autotargetobject 'found'
+  useobject 'lefthand'
+  pause 600
+endwhile
+stop

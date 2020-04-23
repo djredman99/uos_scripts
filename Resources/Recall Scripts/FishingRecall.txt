@@ -1,0 +1,114 @@
+if not @findobject 'FishingPole'
+  promptalias 'FishingPole'
+endif
+if not @findobject 'FishBookOne'
+  promptalias 'FishBookOne'
+endif
+if not @findobject 'FishBookTwo'
+  promptalias 'FishBookTwo'
+endif
+if not @findobject 'FishBookThree'
+  promptalias 'FishBookThree'
+endif
+if not @findobject 'FishBlade'
+  promptalias 'FishBlade'
+endif
+if not listexists 'FishBook'
+  createlist 'FishBook'
+  pushlist 'FishBook' 'FishBookOne'
+  pushlist 'FishBook' 'FishBookTwo'
+  pushlist 'FishBook' 'FishBookThree'
+endif
+if not listexists 'FishRunes'
+  createlist 'FishRunes'
+  pushlist 'FishRunes' 50
+  pushlist 'FishRunes' 51
+  pushlist 'FishRunes' 52
+  pushlist 'FishRunes' 53
+  pushlist 'FishRunes' 54
+  pushlist 'FishRunes' 55
+  pushlist 'FishRunes' 56
+  pushlist 'FishRunes' 57
+  pushlist 'FishRunes' 58
+  pushlist 'FishRunes' 59
+  pushlist 'FishRunes' 60
+  pushlist 'FishRunes' 61
+  pushlist 'FishRunes' 62
+  pushlist 'FishRunes' 63
+  pushlist 'FishRunes' 64
+  pushlist 'FishRunes' 65
+endif
+for 0 to 'FishBook'
+  for 0 to 'FishRunes'
+    clearjournal
+    pause 1000
+    useobject FishBook[]
+    waitforgump 0x59 5000
+    replygump 0x59 FishRunes[]
+    pause 2000
+    if @injournal 'location is blocked' 'system'
+      continue
+    endif
+    equipitem 'FishingPole' 1
+    pause 1500
+    if not @findlayer 'self' 1
+      msg 'No fishing pole in hand, please equip'
+      stop
+    endif
+    while not @injournal 'seem to be biting' 'system'
+      pause 600
+      useobject 'FishingPole'
+      waitfortarget 15000
+      @targettileoffset -2 0 0
+      pause 1000
+      if @injournal 'seem to be biting' 'system'
+        continue
+      endif
+      pause 8000
+      if @findtype 0x9cc 'any' 'backpack'
+        useobject 'FishBlade'
+        waitingfortarget 15000
+        @target 'found'
+        pause 600
+      endif
+      if @findtype 0x9ce 'any' 'backpack'
+        useobject 'FishBlade'
+        waitingfortarget 15000
+        @target 'found'
+        pause 600
+      endif
+      if @findtype 0x9cd 'any' 'backpack'
+        useobject 'FishBlade'
+        waitingfortarget 15000
+        @target 'found'
+        pause 600
+      endif
+      if @findtype 0x9cf 'any' 'backpack'
+        useobject 'FishBlade'
+        waitingfortarget 15000
+        @target 'found'
+        pause 600
+      endif
+    endwhile
+    //if @findtype 0x97a 'any' 'backpack'
+    //  moveitemoffset 'found' 'ground' 1 -1 0
+    //  pause 600
+    //endif
+    while @findtype 0x170f 'any' 'backpack'
+      moveitemoffset 'found' 'ground' 1 0 0
+      pause 600
+    endwhile
+    while @findtype 0x170b 'any' 'backpack'
+      moveitemoffset 'found' 'ground' 1 -1 0
+      pause 600
+    endwhile
+    while @findtype 0x1711 'any' 'backpack'
+      moveitemoffset 'found' 'ground' 2 1 0
+      pause 600
+    endwhile
+    while @findtype 0x170d 'any' 'backpack'
+      moveitemoffset 'found' 'ground' 2 0 0
+      pause 600
+    endwhile
+  endfor
+endfor

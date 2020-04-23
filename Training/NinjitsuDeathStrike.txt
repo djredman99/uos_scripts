@@ -1,0 +1,27 @@
+//if followers < 2
+//cast "mirror image"
+//pause 1500
+//endif
+if mana > 27
+  if not @injournal 'You prepare' 'system'
+    cast "death strike"
+  endif
+  getenemy!  'enemy' 'criminal' 'gray'
+  //getenemy!  'enemy' 'criminal' 'gray' 'humanoid' 'transformation'
+  attack! 'enemy'
+  //attack 0x8999
+  pause 2000
+  if @injournal 'You inflict' 'system' or @injournal 'You missed' 'system'
+    clearjournal
+  endif
+else
+  turn 'south'
+  walk 'south'
+  pause 600
+  useskill "Meditation"
+  while mana < 60
+    pause 1000
+  endwhile
+  turn 'north'
+  walk 'north'
+endif

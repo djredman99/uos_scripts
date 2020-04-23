@@ -1,0 +1,28 @@
+////////////////////////////////////
+////////////////////////////////////
+if mana < maxmana
+  //useskill 'meditation'
+  while mana < maxmana
+    pause 600
+  endwhile
+else
+  if skill 'bushido' < 30
+    headmsg 'Buy more skill!'
+    stop
+  elseif skill 'bushido' < 62.5
+    cast 'confidence'
+    pause 1000
+  elseif skill 'bushido' < 77.5
+    cast 'counter attack'
+    pause 1000
+  elseif skill 'bushido' < 97.5
+    cast 'evasion'
+    pause 1000
+  elseif skill 'bushido' < 120
+    cast 'momentum strike'
+    pause 1000
+  else
+    headmsg 'Bushido complete!'
+    stop
+  endif
+endif

@@ -1,0 +1,16 @@
+if not @findlayer 'self' 2
+  msg 'No fishing pole in hand, please equip'
+  stop
+endif
+useobject 'found'
+waitfortarget 15000
+targettileoffset 4 -4 0
+pause 9000
+useobject 'found'
+waitfortarget 15000
+targettileoffset -4 4 0
+pause 9000
+useobject 'found'
+waitfortarget 15000
+targettileoffset 4 4 0
+pause 9000

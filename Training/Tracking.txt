@@ -1,0 +1,8 @@
+useskill 'Tracking'
+waitforgump 0xb16e7d71 1000
+replygump 0xb16e7d71 4
+waitforgump 0x3b378483 1000
+if @gumpexists 0x3b378483
+  @replygump 0x3b378483 1
+endif
+pause 10500

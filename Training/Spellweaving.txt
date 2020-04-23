@@ -1,0 +1,85 @@
+////////////////////////////////////
+//  This macro is designed for    //
+//  training Necromancy from 30.  //
+//  It is inteded for characters  //
+//       with 40+ intelligence.   //
+//                                //
+//  Turn on loop and click play!  //
+////////////////////////////////////
+if mana < maxmana
+  if skill 'spellweaving' > 37.9
+    if skill 'spellweaving' < 60
+      msg 'Zanne release'
+      msg 'Sefi release'
+      msg 'Laeri release'
+      msg 'Jiki release'
+      msg 'Klistra release'
+      msg 'Ciline release'
+      msg 'Cynthe release'
+      msg 'Hali release'
+      msg 'Liera release'
+      msg 'Zut release'
+      msg 'Os release'
+      msg 'Shiale release'
+      msg 'Ourie release'
+      msg 'Nedra release'
+      msg 'Rael release'
+      msg 'Sini release'
+      msg 'Wienne release'
+      msg 'Piku release'
+      msg 'Calee release'
+      msg 'Ybri release'
+      msg 'Sili release'
+      msg 'Klian release'
+      msg 'Shendri release'
+      msg 'Piepe release'
+      msg 'Xian release'
+      msg 'Shri release'
+    endif
+  endif
+  while mana < maxmana and not buffexists 'Meditation'
+    useskill 'meditation'
+    pause 1000
+  endwhile
+  while mana < maxmana
+    pause 1000
+  endwhile
+else
+  if skill 'spellweaving' < 20
+    cast 'arcane circle' 'self'
+    pause 1000
+  elseif skill 'spellweaving' < 38
+    cast 'immolating weapon' 'self'
+    pause 1000
+    //elseif skill 'spellweaving' < 60
+    // cast 'reaper form'
+    //pause 1000
+  elseif skill 'spellweaving' < 60
+    cast 'summon fey'
+    pause 600
+  elseif skill 'spellweaving' < 74
+    cast 'essence of wind'
+    pause 2500
+  elseif skill 'spellweaving' < 90
+    cast 'wildfire' 'self'
+    pause 1000
+  elseif skill 'spellweaving' < 120
+    if hits > 50
+      cast 'word of death' 'self'
+      pause 3000
+    endif
+    if hits < maxhits
+      pause 2000
+      cast 'heal' 'self'
+      pause 1000
+    endif
+    if hits < 50
+      pause 2000
+      cast 'greater heal' 'self'
+      pause 1000
+    endif
+  else
+    headmsg 'spellweaving complete!'
+    stop
+  endif
+endif

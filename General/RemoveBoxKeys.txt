@@ -1,0 +1,23 @@
+clearignorelist
+while @findtype 0xe3f 'backpack'
+  useobject 'found'
+  setalias 'FoundBox' 'found'
+  pause 600
+  if @findtype 0x100e 'any' 'FoundBox' 1
+    moveitemoffset 'found' 'ground' -1 0 0 1
+    pause 200
+  endif
+  ignoreobject 'FoundBox'
+  unsetalias 'FoundBox'
+endwhile
+while @findtype 0xe3e 'backpack'
+  useobject 'found'
+  setalias 'FoundBox' 'found'
+  pause 600
+  if @findtype 0x100e 'any' 'FoundBox' 1
+    moveitemoffset 'found' 'ground' -1 0 0 1
+    pause 200
+  endif
+  ignoreobject 'FoundBox'
+  unsetalias 'FoundBox'
+endwhile

@@ -1,0 +1,11 @@
+while skill 'Peacemaking' < 100
+  if @injournal 'That is not a musical'
+    usetype '0xe9d' 0x0
+    clearjournal
+    pause 1000
+  endif
+  useskill 'Peacemaking'
+  waitfortarget 15000
+  target! 'self''
+  pause 10100
+endwhile

@@ -1,0 +1,27 @@
+@unsetalias 'BOD Maker Destination'
+clearignorelist
+if not @findobject 'BOD Maker Destination'
+  promptalias 'BOD Maker Destination'
+endif
+ignoreobject 'BOD Maker Destination'
+while not property 'Deeds In Book: 500' 'BOD Maker Destination'
+  while findtype 0x2259 'any' 'backpack'
+    setalias 'currentBODbook' 'found'
+    while not property 'Deeds In Book: 0' 'currentBODbook'
+      useobject! 'currentBODbook'
+      waitforgump 0x54f555df 15000
+      replygump 0x54f555df 5
+      pause 500
+      while @findtype 0x2258 'any' 'backpack'
+        moveitem 'found' 'BOD Maker Destination' 65535 65535 0
+        waitforgump 0x54f555df 2000
+        pause 500
+      endwhile
+      if property 'Deeds In Book: 500' 'BOD Maker Destination'
+        stop
+      endif
+    endwhile
+    ignoreobject 'currentBODbook'
+    unsetalias 'currentBODbook'
+  endwhile
+endwhile

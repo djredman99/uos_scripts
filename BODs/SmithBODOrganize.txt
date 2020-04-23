@@ -1,0 +1,97 @@
+if not @findobject 'Book Iron'
+  sysmsg ' Select Book Iron' 32
+  promptalias 'Book Iron'
+  waitforcontext 'Book Iron' 0 5000
+  waitforprompt 5000
+  promptmsg 'IRON'
+endif
+if not @findobject 'Book Dull'
+  sysmsg ' Select Book Dull' 32
+  promptalias 'Book Dull'
+  waitforcontext 'Book Dull' 0 5000
+  waitforprompt 5000
+  promptmsg 'DULL COPPER'
+endif
+if not @findobject 'Book Shadow'
+  sysmsg ' Select Book Shadow' 32
+  promptalias 'Book Shadow'
+  waitforcontext 'Book Shadow' 0 5000
+  waitforprompt 5000
+  promptmsg 'SHADOW'
+endif
+if not @findobject 'Book Copper'
+  sysmsg ' Select Book Copper' 32
+  promptalias 'Book Copper'
+  waitforcontext 'Book Copper' 0 5000
+  waitforprompt 5000
+  promptmsg 'COPPER'
+endif
+if not @findobject 'Book Bronze'
+  sysmsg ' Select Book Bronze' 32
+  promptalias 'Book Bronze'
+  waitforcontext 'Book Bronze' 0 5000
+  waitforprompt 5000
+  promptmsg 'BRONZE'
+endif
+if not @findobject 'Book Gold'
+  sysmsg ' Select Book Gold' 32
+  promptalias 'Book Gold'
+  waitforcontext 'Book Gold' 0 5000
+  waitforprompt 5000
+  promptmsg 'GOLD'
+endif
+if not @findobject 'Book Agapite'
+  sysmsg ' Select Book Agapite' 32
+  promptalias 'Book Agapite'
+  waitforcontext 'Book Agapite' 0 5000
+  waitforprompt 5000
+  promptmsg 'AGAPITE'
+endif
+if not @findobject 'Book Verite'
+  sysmsg ' Select Book Verite' 32
+  promptalias 'Book Verite'
+  waitforcontext 'Book Verite' 0 5000
+  waitforprompt 5000
+  promptmsg 'VERITE'
+endif
+if not @findobject 'Book Valorite'
+  sysmsg ' Select Book Valorite' 32
+  promptalias 'Book Valorite'
+  waitforcontext 'Book Valorite' 0 5000
+  waitforprompt 5000
+  promptmsg 'VALORITE'
+endif
+if not @findobject 'Book Source'
+  sysmsg ' Select Book Source' 32
+  promptalias 'Book Source'
+endif
+// ORGANIZE
+if @findtype 0x2258 1102 'backpack'
+  if  @property 'dull copper' 'found'
+    moveitem 'found' 'Book Dull'
+  elseif @property 'shadow' 'found'
+    moveitem 'found' 'Book Shadow'
+  elseif @property 'copper' 'found' and not @property 'dull copper' 'found'
+    moveitem 'found' 'Book Copper'
+  elseif @property 'bronze' 'found'
+    moveitem 'found' 'Book Bronze' and not @property 'bronze shield' 'found'
+  elseif @property 'gold' 'found'
+    moveitem 'found' 'Book Gold'
+  elseif @property 'agapite' 'found'
+    moveitem 'found' 'Book Agapite'
+  elseif @property 'verite' 'found'
+    moveitem 'found' 'Book Verite'
+  elseif @property 'valorite' 'found'
+    moveitem 'found' 'Book Valortie'
+  else
+    moveitem 'found' 'Book Iron'
+  endif
+  pause 600
+elseif not @property 'Deeds In Book: 0' 'Book Source'
+  useobject! 'Book Source'
+  waitforgump 0x54f555df 5000
+  replygump 0x54f555df 5
+  pause 1500
+else
+  stop
+endif

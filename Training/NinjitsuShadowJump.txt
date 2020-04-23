@@ -1,0 +1,16 @@
+useskill 'Hiding'
+turn "North"
+walk "North"
+walk "North"
+walk "North"
+turn "South"
+walk "South"
+walk "South"
+walk "South"
+cast "shadowjump"
+waitfortarget 2000
+targettilerelative 'self' 1
+pause 4000
+cast "shadowjump"
+waitfortarget 2000
+targettilerelative 'self' -1

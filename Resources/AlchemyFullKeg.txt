@@ -1,0 +1,14 @@
+// Will Make last potion until the selected Keg is full
+// Have plenty of regs on you
+promptalias 'AlchyKeg'
+pause 600
+while not property 'Weight: 100' 'AlchyKeg'
+  usetype 0xe9b
+  waitforgump 0x38920abd 1000
+  replygump 0x38920abd 8
+  waitforgump 0x38920abd 1000
+  replygump 0x38920abd 21
+  waitforgump 0x38920abd 1000
+  pause 1000
+endwhile
+replygump 0x38920abd 0

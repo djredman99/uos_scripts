@@ -1,0 +1,37 @@
+////////////////////////////////////
+//  This macro is designed for    //
+//  training Necromancy from 30.  //
+//  It is inteded for characters  //
+//       with 40+ intelligence.   //
+//                                //
+//  Turn on loop and click play!  //
+////////////////////////////////////
+if mana < maxmana
+  useskill 'meditation'
+  while mana < maxmana
+    pause 600
+  endwhile
+else
+  if skill 'necromancy' < 30
+    headmsg 'Buy more skill!'
+    stop
+  elseif skill 'necromancy' < 55
+    cast 'wraith form' 'self'
+    pause 1000
+  elseif skill 'necromancy' < 75
+    cast 'horrific beast'
+    pause 1000
+  elseif skill 'necromancy' < 90
+    cast 'wither' 'self'
+    pause 1000
+  elseif skill 'necromancy' < 100
+    cast 'lich form'
+    pause 1000
+  else
+    headmsg 'Necromancy complete!'
+    stop
+  endif
+endif
+if skill 'necromancy' == 100
+  playmacro 'Magery'
+endif

@@ -1,0 +1,98 @@
+clearignorelist
+if not @findobject 'TargetBookT'
+  promptalias 'TargetBookT'
+endif
+if list 'TailorBoxes' == 0
+  removelist 'TailorBoxes'
+  //msg 'BOXES RESET'
+endif
+// Boxes in House
+if not listexists 'TailorBoxes'
+  @createlist 'TailorBoxes'
+  // Stack 1
+  @pushlist 'TailorBoxes' 0x40952fa1
+  @pushlist 'TailorBoxes' 0x40952df9
+  @pushlist 'TailorBoxes' 0x40952a0d
+  @pushlist 'TailorBoxes' 0x40952f1f
+  // Stack 2
+  @pushlist 'TailorBoxes' 0x40952bd6
+  @pushlist 'TailorBoxes' 0x40952b08
+  @pushlist 'TailorBoxes' 0x409530a7
+  @pushlist 'TailorBoxes' 0x40952920
+  // Stack 3
+  @pushlist 'TailorBoxes' 0x409526de
+  @pushlist 'TailorBoxes' 0x40952c69
+  @pushlist 'TailorBoxes' 0x40952d46
+  @pushlist 'TailorBoxes' 0x409527d9
+  // Stack 4
+  @pushlist 'TailorBoxes' 0x4094a1bb
+  @pushlist 'TailorBoxes' 0x4094a2f0
+  @pushlist 'TailorBoxes' 0x40949d07
+  @pushlist 'TailorBoxes' 0x4094a41e
+  // Stack 5
+  //@pushlist 'TailorBoxes' 0x42a022de
+  //@pushlist 'TailorBoxes' 0x423e7f71
+  //@pushlist 'TailorBoxes' 0x42a02481
+  //@pushlist 'TailorBoxes' 0x42a020f4
+endif
+while list 'TailorBoxes' > 0
+  closegump 'container' 'currentbookTB'
+  unsetalias 'currentboxTB'
+  unsetalias 'currentbookTB'
+  if injournal 'The world will save' 'system'
+    clearjournal
+    sysmsg 'Pausing macro for Server Save'
+    waitforjournal 'World save complete' 20000 'system'
+    sysmsg 'Resuming macro'
+  endif
+  if not @findobject TailorBoxes[0]
+    sysmsg 'Cannot find BOX!!!' 0xf00
+    stop
+  endif
+  setalias 'currentboxTB' 'found'
+  while distance 'currentboxTB' > 1
+    turn 'north'
+    walk 'north'
+    pause 600
+  endwhile
+  sysmsg 'Box found' 0xf00
+  useobject 'currentboxTB'
+  pause 600
+  while @findtype 0x2259 0x0 'currentboxTB' 1 5
+    sysmsg 'Found Book...' 0xf00
+    pause 600
+    if @property 'Deeds In Book' 'found' > 305 and @property 'Deeds In Book' 'found' < 500
+      moveitem 'found' 'backpack'
+      pause 1000
+      setalias 'currentbookTB' 'found'
+      sysmsg 'Book Found and moved' 0xf00
+      pause 2000
+      useobject 'currentbookTB'
+      waitforgump 0x54f555df 15000
+      while @property 'Deeds In Book' 'found' > 305
+        msg 'Removing deed'
+        replygump 0x54f555df 5
+        pause 600
+        if @injournal 'container cannot hold more' 'system'
+          while findtype 0x2258 'any' 'The Source'
+            moveitem 'found' 'TargetBookT' 65535 65535 0
+            pause 550
+          endwhile
+        endif
+      endwhile
+      while @findtype 0x2258 1155 'backpack'
+        moveitem 'found' 'TargetBookT' 65535 65535 0
+        waitforgump 0x54f555df 2000
+        pause 600
+      endwhile
+      moveitem 'currentbookTB' 'currentboxTB'
+      ignoreobject 'currentbookTB'
+      pause 600
+    else
+      ignoreobject 'found'
+      pause 600
+    endif
+  endwhile
+  poplist 'TailorBoxes' 'front'
+endwhile
+msg "DONE"

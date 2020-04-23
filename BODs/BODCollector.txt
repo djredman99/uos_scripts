@@ -1,0 +1,57 @@
+useobject 'backpack'
+pause 600
+if not @findobject 'Tailor'
+  setalias 'Tailor' 0xb0278
+endif
+if not @findobject 'Blacksmith'
+  setalias 'Blacksmith' 0xb0299
+endif
+if contextmenu 'Tailor' 1
+  waitforgump 'any' 15000
+  @replygump 'any' 1
+  pause 600
+  // Here you could move BOD type to a BOB
+  if @findtype 0x2259 'any' 'backpack'
+    while @findtype 0x2259 'any' 'backpack'
+      if @property 'Book Name: T' 'found'
+        setalias 'tbook' 'found'
+      endif
+      ignoreobject 'found'
+    endwhile
+    pause 600
+    while @findtype 0x2258 1155 'backpack'
+      moveitem 'found' 'tbook' 65535 65535 0
+      waitforgump 0x54f555df 2000
+    endwhile
+    replygump 'any' 'Exit'
+    clearignorelist
+  endif
+endif
+// Pause may be required
+pause 1000
+if contextmenu 'Blacksmith' 1
+  waitforgump 'any' 15000
+  @replygump 'any' 1
+  pause 600
+  // Here you could move BOD type to a BOB
+  if @findtype 0x2259 'any' 'backpack'
+    while @findtype 0x2259 'any' 'backpack'
+      if @property 'Book Name: B' 'found'
+        setalias 'bsbook' 'found'
+      endif
+      ignoreobject 'found'
+    endwhile
+    while @findtype 0x2258 1102 'backpack'
+      moveitem 'found' 'bsbook' 65535 65535 0
+      waitforgump 0x54f555df 2000
+    endwhile
+    pause 600
+    replygump 'any' 'Exit'
+    clearignorelist
+  endif
+endif
+pause 600
+if not buffexists 'Hiding'
+  useskill 'Hiding'
+endif
+//logoutbutton

@@ -1,0 +1,12 @@
+if mana < 20
+  useskill 'meditation'
+  while mana < maxmana
+    pause 1000
+  endwhile
+else
+  cast "Clumsy"
+  waitfortarget 15000
+  //target! 'self'
+  target! 0xb5b9e
+  pause 2000
+endif

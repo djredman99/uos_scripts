@@ -1,0 +1,4 @@
+useskill 'Anatomy'
+waitfortarget 1000
+target! 0x4d331
+pause 1500

@@ -1,0 +1,12 @@
+while skill 'magery' < 114.8
+  cast "Resurrection"
+  waitfortarget 15000
+  target! 0x8844d
+  pause 1000
+  if mana < 100
+    useskill 'meditation'
+    while mana < 100
+      pause 1000
+    endwhile
+  endif
+endwhile

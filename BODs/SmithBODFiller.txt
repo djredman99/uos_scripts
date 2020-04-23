@@ -1,0 +1,729 @@
+// Author: raveX
+// Description: Smith BOD Filler
+if not @findobject 'Smith Bulk Source'
+  promptalias 'Smith Bulk Source'
+endif
+if not @findobject 'Smith Bulk Destination'
+  promptalias 'Smith Bulk Destination'
+endif
+if not @findobject 'Smith BOD Filler Restock'
+  promptalias 'Smith BOD Filler Restock'
+endif
+//if not @findobject 'Trash BODs Destination'
+//promptalias 'Trash BODs Destination'
+//endif
+if not listexists 'CurrentSmithItems'
+  @createlist 'CurrentSmithItems'
+endif
+// Craft Info
+if not listexists 'SmithCraftInfo'
+  @createlist 'SmithCraftInfo'
+  // *****Swords*****
+  // Katana
+  @pushlist 'SmithCraftInfo' 0x13ff
+  // Viking
+  @pushlist 'SmithCraftInfo' 0x13b9
+  // Broadsword
+  @pushlist 'SmithCraftInfo' 0xf5e
+  // Longsword
+  @pushlist 'SmithCraftInfo' 0xf61
+  // Cutlass
+  @pushlist 'SmithCraftInfo' 0x1441
+  // Scimitar
+  @pushlist 'SmithCraftInfo' 0x13b6
+  // *****Axes*****
+  // Executioner
+  @pushlist 'SmithCraftInfo' 0xf45
+  // Double Axe
+  @pushlist 'SmithCraftInfo' 0xf4b
+  // Two Handed Axe
+  @pushlist 'SmithCraftInfo' 0x1443
+  // Large Battle Axe
+  @pushlist 'SmithCraftInfo' 0x13fb
+  // Battle Axe
+  @pushlist 'SmithCraftInfo' 0xf47
+  // Axe
+  @pushlist 'SmithCraftInfo' 0xf49
+  // Bardiche
+  @pushlist 'SmithCraftInfo' 0xf4d
+  // Halberd
+  @pushlist 'SmithCraftInfo' 0x143e
+  // *****Mace*****
+  // War Axe
+  @pushlist 'SmithCraftInfo' 0x13b0
+  // Maul
+  @pushlist 'SmithCraftInfo' 0x143b
+  // War Mace
+  @pushlist 'SmithCraftInfo' 0x1407
+  // Hammer Pick
+  @pushlist 'SmithCraftInfo' 0x143d
+  // War Hammer
+  @pushlist 'SmithCraftInfo' 0x1439
+  // Mace
+  @pushlist 'SmithCraftInfo' 0xf5c
+  // *****Fencing*****
+  // Kryss
+  @pushlist 'SmithCraftInfo' 0x1401
+  // Dagger
+  @pushlist 'SmithCraftInfo' 0xf52
+  // War Fork
+  @pushlist 'SmithCraftInfo' 0x1405
+  // Short Spear
+  @pushlist 'SmithCraftInfo' 0x1403
+  // Spear
+  @pushlist 'SmithCraftInfo' 0xf62
+  // *****Ringmail*****
+  // Gloves
+  @pushlist 'SmithCraftInfo' 0x13eb
+  // Sleeves
+  @pushlist 'SmithCraftInfo' 0x13ee
+  // Tunic
+  @pushlist 'SmithCraftInfo' 0x13ec
+  // Leggings
+  @pushlist 'SmithCraftInfo' 0x13f0
+  // *****Chainmail*****
+  // Coif
+  @pushlist 'SmithCraftInfo' 0x13bb
+  // Leggings
+  @pushlist 'SmithCraftInfo' 0x13be
+  // Tunic
+  @pushlist 'SmithCraftInfo' 0x13bf
+  // *****Platemail*****
+  // Arms
+  @pushlist 'SmithCraftInfo' 0x1410
+  // Legs
+  @pushlist 'SmithCraftInfo' 0x1411
+  // Gorget
+  @pushlist 'SmithCraftInfo' 0x1413
+  // Gloves
+  @pushlist 'SmithCraftInfo' 0x1414
+  // Tunic
+  @pushlist 'SmithCraftInfo' 0x1415
+  // *****Helms*****
+  // Plate Helm
+  @pushlist 'SmithCraftInfo' 0x1412
+  // Helmet
+  @pushlist 'SmithCraftInfo' 0x140a
+  // Close Helm
+  @pushlist 'SmithCraftInfo' 0x1408
+  // Bascinet
+  @pushlist 'SmithCraftInfo' 0x140c
+  // Norse Helm
+  @pushlist 'SmithCraftInfo' 0x140e
+  // *****Shields*****
+  // Metal
+  @pushlist 'SmithCraftInfo' 0x1b7b
+  // Buckler
+  @pushlist 'SmithCraftInfo' 0x1b73
+  // Bronze
+  @pushlist 'SmithCraftInfo' 0x1b72
+  // Tear Kite
+  @pushlist 'SmithCraftInfo' 0x1b79
+  // Metal Kite
+  @pushlist 'SmithCraftInfo' 0x1b74
+  // Heater
+  @pushlist 'SmithCraftInfo' 0x1b76
+endif
+// Search for a Smith BOD to fill
+if @findtype 0x2258 0x44e 'backpack'
+  @setalias 'bod' 'found'
+  useobject! 'bod'
+  waitforgump 0x5afbd742 3000
+  // Combine
+  if not targetexists 'server'
+    replygump 0x5afbd742 2
+    waitforgump 0x5afbd742 3000
+    waitfortarget 5000
+  endif
+  // Check for tongs
+  if @findtype 0xfbb 0 'backpack'
+    pause 1500
+    @setalias 'tongs' 'found'
+    useobject! 'tongs'
+    waitforgump 0x38920abd 3000
+    // Craft
+    while targetexists 'server'
+      @clearlist 'CurrentSmithItems'
+      if @injournal 'The world will save'
+        clearjournal
+        sysmsg 'Pausing macro for Server Save'
+        waitforjournal 'World save complete' 20000 'system'
+        sysmsg 'Resuming macro'
+      endif
+      if not @ingump 0x5afbd742 'shadow'
+        // Check for ingots
+        if @counttype 0x1bf2 'any' 'backpack' < 20
+          if movetype 0x1bf2 'Smith BOD Filler Restock' 'backpack' 0 0 0 0x0 1000
+            pause 1500
+          else
+            sysmsg 'Out of ingots!' 25
+            @canceltarget
+            stop
+          endif
+        endif
+        // Swords
+        if @ingump 0x5afbd742 'katana'
+          replygump 0x38920abd 36
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 37
+          waitforgump 0x38920abd 3000
+          pause 500
+          while @findtype SmithCraftInfo[0] 'any' 'backpack'
+            pushlist 'CurrentSmithItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'viking'
+          replygump 0x38920abd 36
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 65
+          waitforgump 0x38920abd 3000
+          pause 500
+          while @findtype SmithCraftInfo[1] 'any' 'backpack'
+            pushlist 'CurrentSmithItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'broadsword'
+          replygump 0x38920abd 36
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 9
+          waitforgump 0x38920abd 3000
+          pause 500
+          while @findtype SmithCraftInfo[2] 'any' 'backpack'
+            pushlist 'CurrentSmithItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'longsword'
+          replygump 0x38920abd 36
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 51
+          waitforgump 0x38920abd 3000
+          pause 500
+          while @findtype SmithCraftInfo[3] 'any' 'backpack'
+            pushlist 'CurrentSmithItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'cutlass'
+          replygump 0x38920abd 36
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 23
+          waitforgump 0x38920abd 3000
+          pause 500
+          while @findtype SmithCraftInfo[4] 'any' 'backpack'
+            pushlist 'CurrentSmithItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'scimitar'
+          replygump 0x38920abd 36
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 58
+          waitforgump 0x38920abd 3000
+          pause 500
+          while @findtype SmithCraftInfo[5] 'any' 'backpack'
+            pushlist 'CurrentSmithItems' 'found'
+            ignoreobject 'found'
+          endwhile
+          // Axes
+        elseif @ingump 0x5afbd742 'executioner'
+          replygump 0x38920abd 43
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 23
+          waitforgump 0x38920abd 3000
+          pause 500
+          while @findtype SmithCraftInfo[6] 'any' 'backpack'
+            pushlist 'CurrentSmithItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'double axe'
+          replygump 0x38920abd 43
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 16
+          waitforgump 0x38920abd 3000
+          pause 500
+          while @findtype SmithCraftInfo[7] 'any' 'backpack'
+            pushlist 'CurrentSmithItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'two handed axe'
+          replygump 0x38920abd 43
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 37
+          waitforgump 0x38920abd 3000
+          pause 500
+          while @findtype SmithCraftInfo[8] 'any' 'backpack'
+            pushlist 'CurrentSmithItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'large battle axe'
+          replygump 0x38920abd 43
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 30
+          waitforgump 0x38920abd 3000
+          pause 500
+          while @findtype SmithCraftInfo[9] 'any' 'backpack'
+            pushlist 'CurrentSmithItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'battle axe'
+          replygump 0x38920abd 43
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 9
+          waitforgump 0x38920abd 3000
+          pause 500
+          while @findtype SmithCraftInfo[10] 'any' 'backpack'
+            pushlist 'CurrentSmithItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'axe' and not @ingump 0x5afbd742 'war axe'
+          replygump 0x38920abd 43
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 2
+          waitforgump 0x38920abd 3000
+          pause 500
+          while @findtype SmithCraftInfo[11] 'any' 'backpack'
+            pushlist 'CurrentSmithItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'bardiche'
+          replygump 0x38920abd 50
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 2
+          waitforgump 0x38920abd 3000
+          pause 500
+          while @findtype SmithCraftInfo[12] 'any' 'backpack'
+            pushlist 'CurrentSmithItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'halberd'
+          replygump 0x38920abd 50
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 23
+          waitforgump 0x38920abd 3000
+          pause 500
+          while @findtype SmithCraftInfo[13] 'any' 'backpack'
+            pushlist 'CurrentSmithItems' 'found'
+            ignoreobject 'found'
+          endwhile
+          // Macing
+        elseif @ingump 0x5afbd742 'war axe'
+          replygump 0x38920abd 43
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 44
+          waitforgump 0x38920abd 3000
+          pause 500
+          while @findtype SmithCraftInfo[14] 'any' 'backpack'
+            pushlist 'CurrentSmithItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'maul'
+          replygump 0x38920abd 57
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 16
+          waitforgump 0x38920abd 3000
+          pause 500
+          while @findtype SmithCraftInfo[15] 'any' 'backpack'
+            pushlist 'CurrentSmithItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'war mace'
+          replygump 0x38920abd 57
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 30
+          waitforgump 0x38920abd 3000
+          pause 500
+          while @findtype SmithCraftInfo[16] 'any' 'backpack'
+            pushlist 'CurrentSmithItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'hammer pick'
+          replygump 0x38920abd 57
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 2
+          waitforgump 0x38920abd 3000
+          pause 500
+          while @findtype SmithCraftInfo[17] 'any' 'backpack'
+            pushlist 'CurrentSmithItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'war hammer'
+          replygump 0x38920abd 57
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 37
+          waitforgump 0x38920abd 3000
+          pause 500
+          while @findtype SmithCraftInfo[18] 'any' 'backpack'
+            pushlist 'CurrentSmithItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'mace'
+          replygump 0x38920abd 57
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 9
+          waitforgump 0x38920abd 3000
+          pause 500
+          while @findtype SmithCraftInfo[19] 'any' 'backpack'
+            pushlist 'CurrentSmithItems' 'found'
+            ignoreobject 'found'
+          endwhile
+          // Fencing
+        elseif @ingump 0x5afbd742 'kryss'
+          replygump 0x38920abd 36
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 44
+          waitforgump 0x38920abd 3000
+          pause 500
+          while @findtype SmithCraftInfo[20] 'any' 'backpack'
+            pushlist 'CurrentSmithItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'dagger'
+          replygump 0x38920abd 36
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 30
+          waitforgump 0x38920abd 3000
+          pause 500
+          while @findtype SmithCraftInfo[21] 'any' 'backpack'
+            pushlist 'CurrentSmithItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'war fork'
+          replygump 0x38920abd 50
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 65
+          waitforgump 0x38920abd 3000
+          pause 500
+          while @findtype SmithCraftInfo[22] 'any' 'backpack'
+            pushlist 'CurrentSmithItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'short spear'
+          replygump 0x38920abd 50
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 44
+          waitforgump 0x38920abd 3000
+          pause 500
+          while @findtype SmithCraftInfo[23] 'any' 'backpack'
+            pushlist 'CurrentSmithItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'spear'
+          replygump 0x38920abd 50
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 58
+          waitforgump 0x38920abd 3000
+          pause 500
+          while @findtype SmithCraftInfo[24] 'any' 'backpack'
+            pushlist 'CurrentSmithItems' 'found'
+            ignoreobject 'found'
+          endwhile
+          // Ringmail
+        elseif @ingump 0x5afbd742 'ringmail gloves'
+          replygump 0x38920abd 1
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 2
+          waitforgump 0x38920abd 3000
+          pause 500
+          while @findtype SmithCraftInfo[25] 'any' 'backpack'
+            pushlist 'CurrentSmithItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'ringmail sleeves'
+          replygump 0x38920abd 1
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 16
+          waitforgump 0x38920abd 3000
+          pause 500
+          while @findtype SmithCraftInfo[26] 'any' 'backpack'
+            pushlist 'CurrentSmithItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'ringmail tunic'
+          replygump 0x38920abd 1
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 23
+          waitforgump 0x38920abd 3000
+          pause 500
+          while @findtype SmithCraftInfo[27] 'any' 'backpack'
+            pushlist 'CurrentSmithItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'ringmail leggings'
+          replygump 0x38920abd 1
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 9
+          waitforgump 0x38920abd 3000
+          pause 500
+          while @findtype SmithCraftInfo[28] 'any' 'backpack'
+            pushlist 'CurrentSmithItems' 'found'
+            ignoreobject 'found'
+          endwhile
+          // Chainmail
+        elseif @ingump 0x5afbd742 'chainmail coif'
+          replygump 0x38920abd 8
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 2
+          waitforgump 0x38920abd 3000
+          pause 500
+          while @findtype SmithCraftInfo[29] 'any' 'backpack'
+            pushlist 'CurrentSmithItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'chainmail leggings'
+          replygump 0x38920abd 8
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 9
+          waitforgump 0x38920abd 3000
+          pause 500
+          while @findtype SmithCraftInfo[30] 'any' 'backpack'
+            pushlist 'CurrentSmithItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'chainmail tunic'
+          replygump 0x38920abd 8
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 16
+          waitforgump 0x38920abd 3000
+          pause 500
+          while @findtype SmithCraftInfo[31] 'any' 'backpack'
+            pushlist 'CurrentSmithItems' 'found'
+            ignoreobject 'found'
+          endwhile
+          // Platemail
+        elseif @ingump 0x5afbd742 'platemail arms'
+          replygump 0x38920abd 15
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 2
+          waitforgump 0x38920abd 3000
+          pause 500
+          while @findtype SmithCraftInfo[32] 'any' 'backpack'
+            pushlist 'CurrentSmithItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'platemail legs'
+          replygump 0x38920abd 15
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 23
+          waitforgump 0x38920abd 3000
+          pause 500
+          while @findtype SmithCraftInfo[33] 'any' 'backpack'
+            pushlist 'CurrentSmithItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'platemail gorget'
+          replygump 0x38920abd 15
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 16
+          waitforgump 0x38920abd 3000
+          pause 500
+          while @findtype SmithCraftInfo[34] 'any' 'backpack'
+            pushlist 'CurrentSmithItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'platemail gloves'
+          replygump 0x38920abd 15
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 9
+          waitforgump 0x38920abd 3000
+          pause 500
+          while @findtype SmithCraftInfo[35] 'any' 'backpack'
+            pushlist 'CurrentSmithItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'platemail tunic'
+          replygump 0x38920abd 15
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 30
+          waitforgump 0x38920abd 3000
+          pause 500
+          while @findtype SmithCraftInfo[36] 'any' 'backpack'
+            pushlist 'CurrentSmithItems' 'found'
+            ignoreobject 'found'
+          endwhile
+          // Helms
+        elseif @ingump 0x5afbd742 'plate helm'
+          replygump 0x38920abd 22
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 30
+          waitforgump 0x38920abd 3000
+          pause 500
+          while @findtype SmithCraftInfo[37] 'any' 'backpack'
+            pushlist 'CurrentSmithItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'helmet'
+          replygump 0x38920abd 22
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 16
+          waitforgump 0x38920abd 3000
+          pause 500
+          while @findtype SmithCraftInfo[38] 'any' 'backpack'
+            pushlist 'CurrentSmithItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'close helm'
+          replygump 0x38920abd 22
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 9
+          waitforgump 0x38920abd 3000
+          pause 500
+          while @findtype SmithCraftInfo[39] 'any' 'backpack'
+            pushlist 'CurrentSmithItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'bascinet'
+          replygump 0x38920abd 22
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 2
+          waitforgump 0x38920abd 3000
+          pause 500
+          while @findtype SmithCraftInfo[40] 'any' 'backpack'
+            pushlist 'CurrentSmithItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'norse helm'
+          replygump 0x38920abd 22
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 23
+          waitforgump 0x38920abd 3000
+          pause 500
+          while @findtype SmithCraftInfo[41] 'any' 'backpack'
+            pushlist 'CurrentSmithItems' 'found'
+            ignoreobject 'found'
+          endwhile
+          // Shields
+        elseif @ingump 0x5afbd742 'metal shield'
+          replygump 0x38920abd 29
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 23
+          waitforgump 0x38920abd 3000
+          pause 500
+          while @findtype SmithCraftInfo[42] 'any' 'backpack'
+            pushlist 'CurrentSmithItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'buckler'
+          replygump 0x38920abd 29
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 2
+          waitforgump 0x38920abd 3000
+          pause 500
+          while @findtype SmithCraftInfo[43] 'any' 'backpack'
+            pushlist 'CurrentSmithItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'bronze shield'
+          replygump 0x38920abd 29
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 9
+          waitforgump 0x38920abd 3000
+          pause 500
+          while @findtype SmithCraftInfo[44] 'any' 'backpack'
+            pushlist 'CurrentSmithItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'tear kite shield'
+          replygump 0x38920abd 29
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 37
+          waitforgump 0x38920abd 3000
+          pause 500
+          while @findtype SmithCraftInfo[45] 'any' 'backpack'
+            pushlist 'CurrentSmithItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'metal kite shield'
+          replygump 0x38920abd 29
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 30
+          waitforgump 0x38920abd 3000
+          pause 500
+          while @findtype SmithCraftInfo[46] 'any' 'backpack'
+            pushlist 'CurrentSmithItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        elseif @ingump 0x5afbd742 'heater shield'
+          replygump 0x38920abd 29
+          waitforgump 0x38920abd 3000
+          replygump 0x38920abd 16
+          waitforgump 0x38920abd 3000
+          pause 500
+          while @findtype SmithCraftInfo[47] 'any' 'backpack'
+            pushlist 'CurrentSmithItems' 'found'
+            ignoreobject 'found'
+          endwhile
+        else
+          @unsetalias 'found'
+        endif
+      else
+        // msg 'Not Found'
+      endif
+      // loop through all found items of current type in backpack
+      while list 'CurrentSmithItems' > 0
+        clearignorelist
+        @findobject CurrentSmithItems[0]
+        pause 250
+        target! 'found'
+        waitfortarget 1000
+        if not targetexists and @injournal 'must be exceptional' 'system'
+          // Recycle this item
+          replygump 0x38920abd 14
+          waitfortarget 3000
+          target! CurrentSmithItems[0]
+          pause 1500
+          // bring back target cursor for BOD
+          replygump 0x5afbd742 2
+          waitforgump 0x5afbd742 3000
+          waitfortarget 5000
+          clearjournal
+        endif
+        poplist 'CurrentSmithItems' 'front'
+        pause 250
+      endwhile
+      // Check for tongs before craft
+      if not @findobject 'tongs'
+        break
+      endif
+    endwhile
+    // BOD is complete, move to destination
+    if not targetexists 'server'
+      @moveitem 'bod' 'Smith Bulk Destination'
+    endif
+    pause 1500
+    // Out of tongs
+  elseif @movetype 0xfbb 'Smith BOD Filler Restock' 'backpack'
+    pause 1500
+  else
+    if counttype 0x1eb8 0x0 'backpack' < 2
+      while counttype 0x1eb8 0x0 'backpack' < 2
+        if not counttype 0x1bf2 0x0 'backpack' > 2
+          pause 2000
+          useobject 'Smith BOD Filler Restock'
+          pause 1000
+          movetype 0x1bf2 'Smith BOD Filler Restock' 'backpack' 0 0 0 0x0 100 3
+          pause 2000
+          sysmsg 'Restocked Ingots'
+        endif
+        usetype 0x1eb8 0x0 'backpack'
+        waitforgump 0x38920abd 3000
+        replygump 0x38920abd 23
+        pause 1500
+      endwhile
+    endif
+    while counttype 0xfbb 0x0 'backpack' < 5
+      usetype 0x1eb8 0x0 'backpack'
+      waitforgump 0x38920abd 3000
+      replygump 0x38920abd 8
+      waitforgump 0x38920abd 3000
+      replygump 0x38920abd 86
+      waitforgump 0x38920abd 3000
+    endwhile
+  endif
+elseif not property 'Deeds In Book: 0' 'Smith Bulk Source'
+  useobject! 'Smith Bulk Source'
+  waitforgump 0x54f555df 3000
+  replygump 0x54f555df 5
+  pause 1500
+else
+  sysmsg 'Unable to find BODs to fill.' 64
+  @canceltarget
+  stop
+endif
