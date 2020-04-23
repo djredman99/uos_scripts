@@ -1,0 +1,6 @@
+waitforgump 0xb04c9a31 15000
+replygump 0xb04c9a31 1
+pause 600
+while gumpexists 0x1f3940c6
+  replygump 0x1f3940c6 2
+endwhile

@@ -1,0 +1,3 @@
+cast 'paralyze field'
+waitfortarget 15000
+targettilerelative 'self' -1 -2 0

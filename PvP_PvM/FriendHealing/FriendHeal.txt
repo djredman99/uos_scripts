@@ -1,0 +1,36 @@
+if not listexists 'healfriends'
+  sysmsg 'YOU HAVE NO FRIENDS!!!'
+else
+  //find the friend with lowest hp
+  for 0 to healfriends
+    if @findobject healfriends[] 'any' 'ground' 0 10
+      if dead 'found'
+        continue
+      endif
+      if hits 'found' < maxhits 'found'
+        if not findalias 'healtarget'
+          @setalias 'healtarget' 'found'
+        elseif hits 'found' < hits 'healtarget'
+          @setalias 'healtarget' 'found'
+        endif
+      endif
+    endif
+  endfor
+  //heal friend
+  if findalias 'healtarget'
+    if not inrange 'healtarget' 10
+      unsetalias 'healtarget'
+      playmacro 'autohealfriend'
+    elseif poisoned 'healtarget'
+      cast 'cure' 'healtarget'
+      while waitingfortarget
+      endwhile
+      target! 'healtarget'
+    else if hits 'healtarget' < maxhits 'healtarget'
+      cast 'heal' 'healtarget'
+      while waitingfortarget
+      endwhile
+      target! 'healtarget'
+    endif
+  endif
+endif

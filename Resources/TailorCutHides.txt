@@ -1,0 +1,24 @@
+if not @findobject 'HideSource'
+  promptalias 'HideSource'
+endif
+if counttype 0x1079 0 'HideSource' > 80
+  movetype 0x1079 'HideSource' 'backpack' 90 87 0 0x0 80
+  pause 600
+else
+  movetype 0x1079 'HideSource' 'backpack' 90 87 0 0x0
+  pause 600
+endif
+usetype 0xf9f 0x0 'backpack'
+waitfortarget 3000
+targettype! 0x1079 0x0 'backpack'
+pause 600
+while findtype 0x1081 'any' 'backpack'
+  movetype 0x1081 'backpack' 'HideSource' 65535 65535 0 0x0
+  pause 600
+endwhile
+pause 600
+if counttype 0x1079 0 'HideSource' < 1
+  canceltarget
+  msg 'DONE'
+  stop
+endif

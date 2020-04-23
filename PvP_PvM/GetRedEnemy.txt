@@ -1,0 +1,4 @@
+getenemy 'murderer' 'random'  'humanoid' 'transformation'
+if friend 'found' or infriendlist 'found'
+  continue
+endif

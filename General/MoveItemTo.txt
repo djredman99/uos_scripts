@@ -1,0 +1,6 @@
+promptalias 'The Source'
+promptalias 'The Destination'
+while findtype 0x99f 'any' 'The Source'
+  moveitem 'found' 'The Destination'
+  pause 550
+endwhile

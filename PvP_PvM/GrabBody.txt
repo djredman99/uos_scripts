@@ -1,0 +1,7 @@
+if findtype! '0x2006' '0x851d' 'ground' '2'
+  //replygump 2957810225 1
+  useobject 'found'
+else if findtype! '0x2006' '0x4001' 'ground' '2'
+  //replygump 2957810225 1
+  useobject 'found'
+endif

@@ -1,0 +1,4 @@
+while not buffexists 'Invisibility'
+  cast 'Invisibility' 'self'
+  pause 2000
+endwhile

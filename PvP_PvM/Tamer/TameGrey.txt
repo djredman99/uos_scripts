@@ -1,0 +1,33 @@
+clearjournal
+canceltarget
+while not @injournal! 'You start to tame'
+  useskill 'Animal Taming'
+  waitingfortarget 2000
+  getenemy! 'grey' 'closest' 'nearest'
+  if name enemy != 'DDD' and name enemy != 'First'
+    autotargetenemy!
+  else
+    canceltarget
+  endif
+  pause 500
+endwhile
+clearjournal
+waitforjournal 'You fail' 12000
+//while injournal 'It seems to accept' or injournal 'You fail'
+//  pause 600
+//endwhile
+pause 1000
+if followers > 1
+  if name enemy == 'FFF'
+    rename enemy 'XXX'
+    pause 1000
+  else
+    rename enemy 'DDD'
+    pause 1000
+  endif
+  waitforcontext enemy 9 2000
+  waitforgump 0x909cc741 2000
+  replygump 0x909cc741 2
+  pause 600
+  ignoreobject enemy
+endif

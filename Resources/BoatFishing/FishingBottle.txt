@@ -1,0 +1,42 @@
+// The second macro for boat fishing/harvesting
+// This macro handles the battle portion of Fishing from a boat
+while diffhits > 30 and not dead
+  autotargetself
+  bigheal
+  pause 1500
+endwhile
+pause 4000
+getenemy 'gray' 'criminal' 'closest'
+while @findobject 'enemy'
+  if @inrange 'enemy' 10
+    @autotargetenemy
+    attack 'enemy'
+  endif
+  while followers < 4
+    cast 'summon fire elemental'
+    pause 5000
+    msg 'All Guard Me'
+    msg 'All Guard Me'
+    msg 'All Guard Me'
+  endwhile
+  @canceltarget
+  @autotargetenemy
+  msg 'All Kill'
+  pause 2000
+endwhile
+//if not @findobject 'bow'
+//  promptalias 'bow'
+//endif
+//if not @findobject 'lefthand'
+//  equipitem 'bow' 2
+//endif
+pause 4000
+if dead
+  playsound 'error.wav'
+else
+  playsound 'alert.wav'
+  pause 500
+  playsound 'alert.wav'
+  pause 500
+  playsound 'nap-luucky.wav'
+endif

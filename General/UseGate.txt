@@ -1,0 +1,7 @@
+useobject 0x40e6ac75
+waitforgump 0x554b87f3 15000
+replygump 0x554b87f3 12
+pause 3000
+usetype 0xdda 'any' 'ground'
+waitforgump 0xdd8b146a 15000
+replygump 0xdd8b146a 1

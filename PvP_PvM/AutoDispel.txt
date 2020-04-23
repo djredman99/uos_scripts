@@ -1,0 +1,87 @@
+//set to do not auto interrupt
+if not listexists 'BodyTypes'
+  createlist 'BodyTypes'
+  //human
+  pushlist 'BodyTypes' 0x190
+  pushlist 'BodyTypes' 0x191
+  //wraith
+  pushlist 'BodyTypes' 0x2ec
+  pushlist 'BodyTypes' 0x2eb
+  //elf
+  pushlist 'BodyTypes' 0x25d
+  pushlist 'BodyTypes' 0x25e
+  //lich
+  //  pushlist 'BodyTypes' 0x2ed
+  //vamp
+  //  pushlist 'BodyTypes' 0x2e9
+  // pushlist 'BodyTypes' 0x2e8
+endif
+if not listexists 'ghosts'
+  createlist 'ghosts'
+  pushlist 'ghosts' 0x192
+  pushlist 'ghosts' 0x193
+  pushlist 'ghosts' 0x260
+  pushlist 'ghosts' 0x25f
+endif
+//res dead friends if res precast
+clearignorelist
+if targetexists 'beneficial'
+  for 0 to 'ghosts'
+    while @findtype ghosts[] 'any' ground 1 1
+      if @infriendlist 'found'
+        target! 'found'
+      endif
+      ignoreobject 'found'
+    endwhile
+  endfor
+endif
+//paralyzed friends
+clearignorelist
+ignoreobject 'self'
+for 0 to 'BodyTypes'
+  while @findtype BodyTypes[] 'any' ground 0 10
+    if @infriendlist 'found' and paralyzed 'found'
+      cast 'clumsy' 'found'
+    endif
+    ignoreobject 'found'
+  endwhile
+endfor
+//find lowest hp friend
+clearignorelist
+ignoreobject 'self'
+@setalias 'buddy' 'self'
+for 0 to 'BodyTypes'
+  while @findtype BodyTypes[] 'any' ground 0 10
+    if not @findalias 'buddy' and @infriendlist 'found'
+      if murderer 'found' and @inregion 'guards' 'found' 10
+        headmsg 'Murderer in guards!' 33 'found'
+      elseif criminal 'found' and @inregion 'guards' 'found' 10
+        headmsg 'Criminal in guards!' 1000 'found'
+      else
+        @setalias 'buddy' 'found'
+      endif
+    endif
+    if @infriendlist 'found' and hits 'found' < hits 'buddy'
+      if not yellowhits 'found'
+        if murderer 'found' and @inregion 'guards' 'found' 10
+          headmsg 'Murderer in guards!' 33 'found'
+        elseif criminal 'found' and @inregion 'guards' 'found' 10
+          headmsg 'Criminal in guards!' 1000 'found'
+        else
+          @setalias 'buddy' 'found'
+        endif
+      else
+        headmsg 'Mortaled!' 54 'found'
+      endif
+    endif
+    ignoreobject 'found'
+  endwhile
+endfor
+if targetexists 'server' or targetexists 'beneficial'
+  target! 'buddy'
+endif
+if poisoned 'buddy' and @inrange 'buddy' 10
+  cast 'cure' 'buddy'
+elseif hits 'buddy' < 95 and @inrange 'buddy' 10
+  cast 'heal' 'buddy'
+endif

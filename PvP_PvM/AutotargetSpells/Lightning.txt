@@ -1,0 +1,3 @@
+cast 'lightning' 'enemy'
+waitingfortarget 'server'
+target 'enemy'

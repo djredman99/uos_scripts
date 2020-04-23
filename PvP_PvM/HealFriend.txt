@@ -1,0 +1,26 @@
+// Duplicate for each Friend you create an alias for
+// Typically set a NUM Pad hotkey for each friend 1-9
+// Could loop all friends and determine friend most in need (An Idea , would have to work on it)
+if not @findalias 'Friend1'
+  promptalias 'Friend1'
+endif
+if @inrange 'Friend1' 10 and yellowhits 'Friend1'
+  sysmsg 'Mortaled!' 30
+else
+  if @inrange 'Friend1' 10 and targetexists 'beneficial'
+    target! 'Friend1'
+  endif
+  if @inrange 'Friend1' 10 and poisoned 'Friend1'
+    cast 'Cure' 'Friend1'
+  else
+    if @inrange 'Friend1' 10 and paralyzed 'Friend1'
+      cast 'feeblemind' 'Friend1'
+    else
+      if @inrange 'Friend1' 10
+        cast 'Heal' 'Friend1'
+      else
+        sysmsg 'Out of Range!' 30
+      endif
+    endif
+  endif
+endif

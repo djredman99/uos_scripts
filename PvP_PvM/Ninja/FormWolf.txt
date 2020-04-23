@@ -1,0 +1,3 @@
+cast "Animal Form"
+waitforgump 0xb477696a 15000
+replygump 0xb477696a 4

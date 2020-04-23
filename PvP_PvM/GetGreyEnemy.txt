@@ -1,0 +1,1 @@
+getenemy  'enemy' 'random' 'criminal' 'gray' 'innocent' 'humanoid' 'transformation'

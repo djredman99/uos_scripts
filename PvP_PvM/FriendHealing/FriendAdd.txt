@@ -1,0 +1,7 @@
+if not listexists 'healfriends'
+  createlist 'healfriends'
+endif
+promptalias 'friend'
+if not @inlist 'healfriends' 'friend'
+  @pushlist 'healfriends' 'friend'
+endif

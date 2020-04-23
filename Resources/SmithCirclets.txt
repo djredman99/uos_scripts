@@ -1,0 +1,17 @@
+for 60
+  if not @findobject 'TurnInBag'
+    promptalias 'TurnInBag'
+  endif
+  if @findtype 0xfbb 0 'backpack'
+    pause 1500
+    @setalias 'tongs' 'found'
+    useobject! 'tongs'
+    waitforgump 0x38920abd 3000
+    replygump 0x38920abd 2
+    waitforgump 0x38920abd 15000
+    while @findtype 0x1b73 'any' 'backpack' 0 0
+      movetype 0x1b73 'backpack' 'TurnInBag'
+      pause 500
+    endwhile
+  endif
+endfor

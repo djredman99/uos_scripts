@@ -1,0 +1,29 @@
+headmsg 'Checking Pots' 33 'self'
+if not timerexists 'Heal Potion'
+  createtimer 'Heal Potion'
+endif
+if @findlayer 'self' 2
+  moveitem 'found' 'backpack'
+  pause 1000
+endif
+if stam < 10
+  // Refresh potion
+  usetype! 0xf0b
+endif
+if poisoned 'self'
+  // Cure potion
+  usetype! 0xf07
+endif
+if hits <= 100 and timer 'Heal Potion' >= 10250
+  //if diffhits >= 20 and timer 'Heal Potion' >= 10250
+  // Heal potion
+  usetype! 0xf0c
+  settimer 'Heal Potion' 0
+endif
+if stam < 100
+  // Refresh potion
+  usetype! 0xf0b
+endif
+pause 600
+equipitem 'found' 2
+playmacro 'HealSelf'

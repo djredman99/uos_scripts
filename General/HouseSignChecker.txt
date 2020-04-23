@@ -1,0 +1,62 @@
+// Checks for Houses that are Collapsing
+//clearignorelist
+if @findtype 0xbd2 'any' 'ground' 1 5
+  sysmsg 'found sign'
+  waitforproperties 'found' 5000
+  if @property 'Condition' 'found' == 'This house'
+    sysmsg 'FALLING HOUSE'
+  else
+    sysmsg 'House is OK' 0x1ecd
+  endif
+  ignoreobject 'found'
+endif
+if @findtype 0xbfe 'any' 'ground' 1 5
+  sysmsg 'found sign'
+  waitforproperties 'found' 5000
+  if @property 'Condition' 'found' == 'This house'
+    sysmsg 'FALLING HOUSE'
+  else
+    sysmsg 'House is OK' 0x1ecd
+  endif
+  ignoreobject 'found'
+endif
+if @findtype 0xc0c 'any' 'ground' 1 5
+  sysmsg 'found sign'
+  waitforproperties 'found' 5000
+  if @property 'Condition' 'found' == 'This house'
+    sysmsg 'FALLING HOUSE'
+  else
+    sysmsg 'House is OK' 0x1ecd
+  endif
+  ignoreobject 'found'
+endif
+if @findtype 0xbd0 'any' 'ground' 1 5
+  sysmsg 'found sign'
+  waitforproperties 'found' 5000
+  if @property 'Condition' 'found' == 'This house'
+    sysmsg 'FALLING HOUSE'
+  else
+    sysmsg 'House is OK' 0x1ecd
+  endif
+  ignoreobject 'found'
+endif
+if @findtype 0xbcc 'any' 'ground' 1 5
+  sysmsg 'found sign'
+  waitforproperties 'found' 5000
+  if @property 'Condition' 'found' == 'This house'
+    sysmsg 'FALLING HOUSE'
+  else
+    sysmsg 'House is OK' 0x1ecd
+  endif
+  ignoreobject 'found'
+endif
+if @findtype 0xbbc 'any' 'ground' 1 5
+  sysmsg 'found sign'
+  waitforproperties 'found' 5000
+  if @property 'Condition' 'found' == 'This house'
+    sysmsg 'FALLING HOUSE'
+  else
+    sysmsg 'House is OK' 0x1ecd
+  endif
+  ignoreobject 'found'
+endif

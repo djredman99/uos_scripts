@@ -1,0 +1,8 @@
+// Macro to use blade on a sea serpent corpse
+promptalias 'Target'
+useobject 0x40422ec5
+waitfortarget 15000
+target! 'Target'
+pause 500
+useobject 'Target'
+pause 500

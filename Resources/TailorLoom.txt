@@ -1,0 +1,22 @@
+if findtype 0x1062 'any' 'ground' 0 3
+  autotargetobject 'found'
+  if findtype 0xfa0 'any' 'backpack'
+    usetype 0xfa0
+  else if findtype 0xe1d 'any' 'backpack'
+    usetype 0xe1d
+  else
+    msg 'DONE'
+    break
+  endif
+else if findtype 0x105f 'any' 'ground' 0 3
+  autotargetobject 'found'
+  if findtype 0xfa0 'any' 'backpack'
+    usetype 0xfa0
+  else if findtype 0xe1d 'any' 'backpack'
+    usetype 0xe1d
+  else
+    msg 'DONE'
+    break
+  endif
+endif
+pause 1500

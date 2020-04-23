@@ -1,0 +1,6 @@
+// Cast Lich Form
+// Allow a low healing Cu attempt a heal every 30 seconds
+feed 0x8438f 'peach' 'any' 1
+for 30
+  pause 60000
+endfor

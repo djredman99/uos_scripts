@@ -1,0 +1,11 @@
+if @findtype 0x27aa 'any' 'backpack'
+  waitforproperties 'found' 3000
+  if @property 'Uses Remaining' 'found' < 1
+    clickobject 'found'
+    waitforcontext 0x406a9832 0 15000
+    waitfortarget 15000
+    targettype 0x2806 'any'
+  endif
+endif
+useobject 'found'
+target 'enemy'

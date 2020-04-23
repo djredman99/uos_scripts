@@ -1,0 +1,14 @@
+@unsetalias 'HeldItem_Steal'
+promptalias 'StealTarget'
+if @findlayer 'self' 1
+  moveitem 'found' 'backpack'
+  setalias 'HeldItem_Steal' 'found'
+  pause 600
+endif
+useskill 'Stealing'
+waitfortarget 15000
+target! 'StealTarget'
+pause 600
+if @findalias 'HeldItem_Steal'
+  equipitem 'found' 1
+endif

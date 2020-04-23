@@ -1,0 +1,30 @@
+// This should be set to 'Do not auto interrupt'
+// A 'Hold button down' loop
+if not timerexists 'poisontimer'
+  createtimer 'poisontimer'
+  //settimer 'poisontimer' 0
+endif
+if @inrange 'enemy' 10
+  // Dump existing harmful target on enemy
+  if targetexists 'harmful'
+    target! 'enemy'
+  elseif timer 'poisontimer' > 3000 and not poisoned 'enemy'
+    cast 'poison' 'enemy'
+    settimer 'poisontimer' 0
+    // Harm if enemy is standing next to you
+  elseif @inrange 'enemy' 1
+    cast 'Harm' 'enemy'
+  else
+    // Handle sequence, using alias trick
+    if not @findalias 'Sequencing'
+      cast 'Magic Arrow' 'enemy'
+      @setalias 'Sequencing' 'self'
+    else
+      cast 'Fireball' 'enemy'
+      @unsetalias 'Sequencing'
+    endif
+    // Wait until cast is finished
+    while waitingfortarget 'harmful'
+    endwhile
+  endif
+endif

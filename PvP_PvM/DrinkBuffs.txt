@@ -1,0 +1,14 @@
+headmsg 'Buff Potions' 33 'self'
+if @findlayer 'self' 2
+  moveitem 'found' 'backpack'
+  pause 1000
+endif
+if not buffexists 'Agility'
+  usetype! 0xf08
+endif
+if not buffexists 'Strength'
+  usetype! 0xf09
+endif
+pause 600
+equipitem 'found' 2
+playmacro 'HealSelf'

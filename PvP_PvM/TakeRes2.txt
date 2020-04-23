@@ -1,0 +1,20 @@
+if dead 'self'
+  warmode 'on'
+endif
+while dead
+  waitforgump 0xb04c9a31 15000
+  replygump 0xb04c9a31 1
+  pause 200
+endwhile
+pause 200
+while @findtype 0x2006 'any' 'ground' '2'
+  if @findobject 'found'
+    useobject 'found'
+  endif
+  ignoreobject 'found'
+endwhile
+pause 600
+if not mounted
+  togglemounted
+endif
+clearignorelist

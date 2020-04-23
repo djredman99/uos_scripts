@@ -1,0 +1,3 @@
+@virtue 'Honor'
+pause 600
+playmacro 'HealSelf'

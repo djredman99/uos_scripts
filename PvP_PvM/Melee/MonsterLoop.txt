@@ -1,0 +1,80 @@
+warmode 'on'
+if not listexists 'farmingMonsters'
+  createlist 'farmingMonsters'
+  //pushlist 'farmingMonsters' 0x101 // Dread Horn
+  //pushlist 'farmingMonsters' 0x100 // Chief Parox
+  //pushlist 'farmingMonsters' 0x2e //Ancient Wyrm
+  //pushlist 'farmingMonsters' 0x28 //Balron
+  //pushlist 'farmingMonsters' 0xbd //Orc Brute
+  //pushlist 'farmingMonsters' 0x30 //Scorpion (Miasma)
+  //pushlist 'farmingMonsters' 0x95 //Succubus
+  pushlist 'farmingMonsters' 0x191 //Ogres
+  pushlist 'farmingMonsters' 0x190 //Ice Fiend
+endif
+// Counter Attack
+// clearjournal
+// while not @injournal 'respond immediately to the next blocked blow' 'system'
+//   cast 'counter attack'
+//   waitforjournal 'respond immediately to the next blocked blow' 500 'system'
+//   if @injournal 'respond immediately to the next blocked blow' 'system'
+//     waitforjournal 'attack with lightning' 5000 'system'
+//   endif
+// endwhile
+for 0 in 'farmingMonsters'
+  while @findtype farmingMonsters[] 'any' and not dead farmingMonsters[] 'any'
+    getenemy 'found'
+    if hits 'found' == maxhits 'found'
+      virtue 'honor'
+      waitfortarget 600
+      target! 'found'
+    endif
+    attack 'found'
+    if @findtype 0x2263 'any' 'backpack' and not buffexists 'curse weapon'
+      usetype! 0x2263
+      pause 500
+    endif
+    //@setability 'primary' 'on'
+    //if @injournal 'attack with lightning!' 'system' or @injournal 'failure message' 'system'
+    //  cast "counter attack"
+    //endif
+    if not buffexists 'enemy of one'
+      cast 'enemy of one'
+      pause 600
+    endif
+    if not buffexists 'confidence'
+      cast 'confidence'
+      pause 600
+    endif
+    if stam < 100
+      cast 'divine fury'
+      pause 600
+    else
+      if not buffexists 'Lightning Strike'
+        cast "Lightning Strike"
+      endif
+    endif
+    if not buffexists 'consecrate weapon'
+      cast 'consecrate weapon'
+    endif
+    clearjournal
+  endwhile
+  if poisoned 'self' and not buffexists 'confidence'
+    cast 'confidence'
+    pause 600
+  endif
+endfor
+//if poisoned 'self'
+//  cast "Cleanse by Fire"
+//  waitfortarget 5000
+//  target! 'self'
+//endif
+if gold >= 40000
+  if @findtype '0xe76' 'any' 'backpack'
+    @setalias 'BagOfSending' 'found'
+    if @findtype '0xeed' 'any' 'backpack'
+      useobject 'BagOfSending'
+      waitfortarget 11000
+      target 'found' 2000
+    endif
+  endif
+endif

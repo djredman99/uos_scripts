@@ -1,0 +1,13 @@
+for 20
+  cast "Fireball"
+  waitfortarget 2000
+  targettype! 0x102
+  pause 800
+endfor
+pause 600
+cast "Arcane Empowerment"
+pause 4000
+cast "Corpse Skin"
+pause 3000
+waitfortarget 2000
+targettype! 0x102

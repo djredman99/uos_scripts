@@ -1,0 +1,12 @@
+clearjournal
+useskill 'Animal Taming'
+waitfortarget 1000
+//autotargetlast
+target! 0x270e
+pause 400
+if @injournal 'You start to tame'
+  pause 10000
+endif
+if @injournal 'That animal looks tame'
+  stop
+endif

@@ -1,0 +1,12 @@
+if @findtype 0x1015 'any' 'ground' 0 3
+  autotargetobject 'found'
+  if @findtype 0xdf9 'any' 'backpack'
+    usetype 0xdf9
+  else if @findtype 0xdf8 'any' 'backpack'
+    usetype 0xdf8
+  else
+    msg 'DONE!!!'
+    stop
+  endif
+endif
+pause 2200

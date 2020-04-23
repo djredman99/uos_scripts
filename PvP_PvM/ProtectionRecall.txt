@@ -1,0 +1,5 @@
+cast 'Protection'
+pause 1100
+cast "Recall"
+waitfortarget 15000
+target! 0x405db854

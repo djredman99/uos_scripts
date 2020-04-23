@@ -1,0 +1,10 @@
+//unsetalias 'aBPKWeapOne'
+//unsetalias 'aBPKWeapTwo'
+if not @findalias 'aBPKWeapOne'
+  promptalias 'aBPKWeapOne'
+endif
+if not @findalias 'aBPKWeapTwo'
+  promptalias 'aBPKWeapTwo'
+endif
+equipitem 'aBPKWeapOne' 1
+playmacro 'HealSelf'

@@ -1,0 +1,4 @@
+if listexists 'healfriends'
+  clearlist 'healfriends'
+  removelist 'healfriends'
+endif

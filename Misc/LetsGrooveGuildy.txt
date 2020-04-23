@@ -1,0 +1,9 @@
+msg 'DUDE' 43
+pause 1000
+msg 'WHAT' 77
+pause 200
+msg 'THE' 77
+pause 200
+msg 'FUCK' 53
+pause 8000
+msg 'You need to quit the guild' 53

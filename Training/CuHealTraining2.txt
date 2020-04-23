@@ -1,0 +1,20 @@
+for 20
+  cast "Poison"
+  waitfortarget 15000
+  target! 0x2f7bd
+  pause 1500
+  cast "Poison"
+  waitfortarget 15000
+  target! 0x2f7bd
+  pause 1500
+  cast "Fireball"
+  waitfortarget 15000
+  target! 0x2f7bd
+  pause 1500
+  cast "Fireball"
+  waitfortarget 15000
+  target! 0x2f7bd
+  pause 24000
+endfor
+//feed 0x8438f 'peach' 'any' 1
+pause 1000

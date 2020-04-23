@@ -1,0 +1,15 @@
+warmode 'on'
+getenemy 'enemy' 'criminal' 'murderer' 'gray''closest'
+attack 'enemy'
+if not buffexists 'lightning strike'
+  cast 'lightning strike'
+endif
+if poisoned 'self' and not buffexists 'confidence'
+  cast 'confidence'
+  pause 600
+  stop
+endif
+if hits < 75
+  cast 'confidence'
+  pause 600
+endif

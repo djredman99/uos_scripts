@@ -1,0 +1,6 @@
+cast "Combat Training"
+waitfortarget 15000
+target! 0x1248d
+waitforgump 0x92e576b6 15000
+replygump 0x92e576b6 0
+pause 2000

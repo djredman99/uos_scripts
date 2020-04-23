@@ -1,0 +1,10 @@
+// Macro for harvesting a sea serpent's corpse
+if @findtype 0x1079 'any' 'backpack'
+  usetype 0xf9f 'any' 'backpack' 2
+  waitfortarget 15000
+  targettype 0x1079 'any'
+  pause 500
+endif
+movetype 0x1081 'backpack' 0x4135b251 65535 65535 0
+pause 600
+movetype 0x26b4 'backpack' 0x4135b251 65535 65535 0

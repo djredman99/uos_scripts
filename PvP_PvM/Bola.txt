@@ -1,0 +1,7 @@
+if @findtype 0x26ac
+  if mounted 'self'
+    @useobject 'self'
+  endif
+  pause 600
+  @usetype 0x26ac
+endif

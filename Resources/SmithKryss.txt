@@ -1,0 +1,43 @@
+while skill 'Blacksmithy' < 86.7
+  if @findtype 0xfbb 0 'backpack'
+    pause 1500
+    @setalias 'tongs' 'found'
+    useobject! 'tongs'
+    waitforgump 0x38920abd 3000
+    replygump 0x38920abd 36
+    waitforgump 0x38920abd 3000
+    replygump 0x38920abd 44
+    waitforgump 0x38920abd 3000
+    pause 500
+    if @findtype 0x1401 'any' 'backpack'
+      replygump 0x38920abd 14
+      waitfortarget 2000
+      target! 'found'
+    endif
+  else
+    if counttype 0x1eb8 0x0 'backpack' < 2
+      while counttype 0x1eb8 0x0 'backpack' < 2
+        if not counttype 0x1bf2 0x0 'backpack' > 2
+          pause 2000
+          useobject 'Smtih BOD Filler Restock'
+          pause 1000
+          movetype 0x1bf2 'Smtih BOD Filler Restock' 'backpack' 0 0 0 0x0 100 3
+          pause 2000
+          sysmsg 'Restocked Ingots'
+        endif
+        usetype 0x1eb8 0x0 'backpack'
+        waitforgump 0x38920abd 3000
+        replygump 0x38920abd 23
+        pause 1500
+      endwhile
+    endif
+    while counttype 0xfbb 0x0 'backpack' < 5
+      usetype 0x1eb8 0x0 'backpack'
+      waitforgump 0x38920abd 3000
+      replygump 0x38920abd 8
+      waitforgump 0x38920abd 3000
+      replygump 0x38920abd 86
+      waitforgump 0x38920abd 3000
+    endwhile
+  endif
+endwhile

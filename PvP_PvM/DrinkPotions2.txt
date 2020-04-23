@@ -1,0 +1,15 @@
+if stam < maxstam and @findtype 0xf0b 0 'backpack'
+  usetype 0xf0b 0 'backpack'
+  pause 600
+elseif poisoned 'self' and @findtype 0xf07 0 'backpack'
+  usetype 0xf07 0 'backpack'
+  pause 600
+elseif hits != maxhits and @findtype 0xf0c 0 'backpack'
+  usetype 0xf0c 0 'backpack'
+  pause 600
+elseif @findtype 0xf0b 0 'backpack'
+  if stam < maxstam
+    usetype 0xf0b 0 'backpack'
+    pause 600
+  endif
+endif

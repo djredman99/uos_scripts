@@ -1,0 +1,16 @@
+promptalias 'Target'
+useobject 0x4007a114
+waitfortarget 15000
+target! 'Target'
+pause 600
+useobject 'Target'
+pause 600
+movetypeoffset 0x1079 'Target' 'backpack'
+pause 600
+useobject 0x400e3325
+waitfortarget 15000
+targettype 0x1079
+pause 500
+movetype 0x1081 'backpack' 0x118b71 65535 65535 0
+pause 600
+playmacro 'HealSelf'

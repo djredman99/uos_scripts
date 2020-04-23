@@ -1,0 +1,18 @@
+@setability 'primary' 'on'
+if @findobject 'enemy' and @inrange 'enemy' 1
+  @attack! 'enemy'
+  pause 1500
+  //standard sampire buff loop
+  if not @buffexists 'consecrate weapon'
+    @cast 'consecrate weapon'
+    pause 500
+  elseif not @buffexists 'counter attack'
+    @cast 'counter attack'
+    pause 500
+  elseif stam <= 150
+    @cast 'divine fury'
+    pause 500
+  endif
+else
+  @getenemy 'murderer' 'enemy' 'criminal' 'gray' 'closest'
+endif

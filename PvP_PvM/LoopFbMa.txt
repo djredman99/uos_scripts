@@ -1,0 +1,24 @@
+// This should be set to 'Do not auto interrupt'
+// A 'Hold button down' loop
+if not listexists 'fbarrow'
+  createlist 'fbarrow'
+endif
+if @inrange 'enemy' 1
+  cast 'harm' 'enemy'
+else
+  if @inlist 'fbarrow' 'arrow'
+    cast 'magic arrow' 'enemy'
+    while waitingfortarget 'server'
+      target 'enemy'
+    endwhile
+    poplist 'fbarrow' 'arrow'
+    stop
+  else
+    cast 'fireball' 'enemy'
+    while waitingfortarget 'server'
+      target 'enemy'
+    endwhile
+    pushlist 'fbarrow' 'arrow'
+    stop
+  endif
+endif

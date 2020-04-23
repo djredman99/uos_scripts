@@ -1,0 +1,3 @@
+cast 'harm' 'enemy'
+waitingfortarget 'server'
+target 'enemy'

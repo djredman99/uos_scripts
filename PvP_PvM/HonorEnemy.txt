@@ -1,0 +1,16 @@
+@getenemy 'murderer' 'Enemy' 'criminal' 'gray' 'closest'
+if @inrange 'enemy' 12
+  pause 100
+  if not serial 'enemy' == serial 'LastEnemy'
+    if hits 'enemy' == maxhits 'enemy'
+      @clearjournal
+      @virtue 'Honor'
+      @autotargetobject! 'enemy'
+      pause 300
+      if not @injournal 'seen' 'system' or not @injournal 'far' 'system'
+        @setalias 'LastEnemy' 'enemy'
+      endif
+    endif
+  endif
+endif
+playmacro 'HealSelf'

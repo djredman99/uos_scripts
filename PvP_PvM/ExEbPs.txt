@@ -1,0 +1,9 @@
+cast 'explosion' 'enemy'
+while waitingfortarget 'enemy'
+endwhile
+cast 'energy bolt' 'enemy'
+while waitingfortarget 'enemy'
+endwhile
+cast 'pain spike' 'enemy'
+while waitingfortarget 'enemy'
+endwhile
