@@ -1,0 +1,73 @@
+//useobject 'LeftHand'
+//waitfortarget 1000
+if z == -6
+  msg '-6'
+  targettileoffset -1 0 0
+elseif z == -5
+  msg '-5'
+  targettileoffset -1 0 0
+elseif z == -4
+  msg '-4'
+  targettileoffset -1 0 0
+elseif z == -3
+  msg '-3'
+  targettileoffset -1 0 0
+elseif z == -2
+  msg '-2'
+  targettileoffset -1 0 0
+elseif z == -1
+  msg '-1'
+  targettileoffset -1 0 0
+elseif z == 0
+  msg '0'
+  targettileoffset -1 0 0
+elseif z == 1
+  msg '1'
+  targettileoffset -1 0 0
+elseif z == 2
+  msg '2'
+  targettileoffset -1 0 0
+elseif z == 3
+  msg '3'
+  targettileoffset -1 0 0
+elseif z == 4
+  msg '4'
+  targettileoffset -1 0 0
+elseif z == 5
+  msg '5'
+  targettileoffset -1 0 0
+elseif z == 6
+  msg '6'
+  targettileoffset -1 0 0
+elseif z == 7
+  msg '7'
+  targettileoffset -1 0 0
+elseif z == 8
+  msg '8'
+  targettileoffset -1 0 0
+elseif z == 9
+  msg '9'
+  targettileoffset -1 0 0
+elseif z == 10
+  msg '10'
+  targettileoffset -1 0 0
+elseif z == 11
+  msg '11'
+  targettileoffset -1 0 0
+elseif z == 12
+  msg '12'
+  targettileoffset -1 0 0
+elseif z == 13
+  msg '13'
+  targettileoffset -1 0 0
+elseif z == 14
+  msg '14'
+  targettileoffset -1 0 0
+elseif z == 15
+  msg '15'
+  targettileoffset -1 0 0
+else
+  msg 'default'
+  targettileoffset -1 0 0
+endif
+pause 1500
