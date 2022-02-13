@@ -1,0 +1,33 @@
+// Bowyer
+waitforcontext 0x36 1 2000
+pause 300
+if gumpexists 0x9bade6ea
+  replygump 0x9bade6ea 1
+elseif gumpexists 0xbe0dad1e
+  replygump 0xbe0dad1e 1
+endif
+pause 600
+// Carpenter
+waitforcontext 0x40 1 2000
+pause 300
+if gumpexists 0x9bade6ea
+  replygump 0x9bade6ea 1
+elseif gumpexists 0xbe0dad1e
+  replygump 0xbe0dad1e 1
+endif
+pause 600
+// Tinker
+waitforcontext 0x3e 1 2000
+pause 300
+if gumpexists 0x9bade6ea
+  replygump 0x9bade6ea 1
+elseif gumpexists 0xbe0dad1e
+  replygump 0xbe0dad1e 1
+endif
+pause 600
+if @findtype 0x2259 'any' 'backpack'
+  setalias 'BODBook' 'found'
+  while @findtype 0x2258 'any' 'backpack'
+    moveitem 'found' 'BODBook'
+  endwhile
+endif
