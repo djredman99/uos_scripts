@@ -1,0 +1,10 @@
+//unsetalias 'trapBag'
+if not findalias 'trapBag'
+  promptalias 'trapBag'
+endif
+//useobject 'trapBag'
+if @findtype 0x44cf 'any' 'trapBag'
+  useobject 'found'
+else
+  headmsg 'No traps found' 33
+endif
