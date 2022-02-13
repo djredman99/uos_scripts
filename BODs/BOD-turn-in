@@ -1,0 +1,25 @@
+//unsetalias 'BOD Source'
+//unsetalias 'BOD Vendor'
+if not @findobject 'BOD Source'
+  promptalias 'BOD Source'
+endif
+if not @findobject 'BOD Vendor'
+  promptalias 'BOD Vendor'
+endif
+pause 600
+useobject 'BOD Source'
+waitforgump 0x54f555df 15000
+replygump 0x54f555df 5
+waitforgump 0x54f555df 15000
+pause 1000
+movetype 0x2258 'backpack' 'BOD Vendor' 65535 65535 0
+pause 1000
+waitforcontext 'BOD Vendor' 1 15000
+pause 600
+if gumpexists 0x9bade6ea
+  replygump 0x9bade6ea 1
+elseif gumpexists 0xbe0dad1e
+  replygump 0xbe0dad1e 1
+endif
+pause 1000
+movetype 0x2258 'backpack' 'BOD Source' 65535 65535 0
