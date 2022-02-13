@@ -1,0 +1,16 @@
+// This macro is to keep a summon present and guarding
+// For when traveling long distance and focus is not onscreen
+if not inregion 'guards'
+  while followers < 4
+    cast 'summon fire elemental'
+    pause 5000
+    msg 'All Guard Me'
+    msg 'All Guard Me'
+    msg 'All Guard Me'
+  endwhile
+endif
+pause 1000
+if @injournal 'stopped sir'
+  playsound 'alert.wav'
+  @clearjournal
+endif
