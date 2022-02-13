@@ -1,0 +1,694 @@
+// ******************************
+// Master Spellbook Filler
+//
+// author: raveX
+//
+// ******************************
+// Script will make full spellbooks located in a pack/bag
+//
+// Magery
+// Necromancy
+// Mysticism
+// ******************************
+//
+// ******************************
+// CLEAR User option lists
+// ******************************
+@clearlist 'makeBooks'
+@clearlist 'numberOfBooks'
+@clearlist 'fillMageryBooks'
+@clearlist 'fillNecroBooks'
+@clearlist 'fillMysticismBooks'
+@clearlist 'fillMagery12'
+@clearlist 'fillMagery34'
+@clearlist 'fillMagery56'
+@clearlist 'fillMagery78'
+@clearlist 'tinkerPens'
+@clearlist 'textcolor'
+@clearlist 'errortextcolor'
+//
+@createlist 'makeBooks'
+@createlist 'numberOfBooks'
+@createlist 'fillMageryBooks'
+@createlist 'fillNecroBooks'
+@createlist 'fillMysticismBooks'
+@createlist 'fillMagery12'
+@createlist 'fillMagery34'
+@createlist 'fillMagery56'
+@createlist 'fillMagery78'
+@createlist 'tinkerPens'
+@createlist 'textcolor'
+@createlist 'errortextcolor'
+// ******************************
+// User options (Yes/yes or No/no)
+// ******************************
+// Make the books or fill books located in a container
+pushlist 'makeBooks' 'Yes'
+// Look for and fill Magery Books
+pushlist 'fillMageryBooks' 'No'
+// Look for and fill Necromancy Books
+pushlist 'fillNecroBooks' 'Yes'
+// Look for and fill Mysticism Books
+pushlist 'fillMysticismBooks' 'No'
+// Fill 1st and 2nd level spells
+pushlist 'fillMagery12' 'Yes'
+// Fill 1st and 2nd level spells
+pushlist 'fillMagery34' 'Yes'
+// Fill 1st and 2nd level spells
+pushlist 'fillMagery56' 'Yes'
+// Fill 1st and 2nd level spells
+pushlist 'fillMagery78' 'Yes'
+// If you have Tinkering and want to make pens as you go, set to Yes
+pushlist 'tinkerPens' 'Yes'
+// ******************************
+// User options (integers)
+// ******************************
+// How many books to create/fill (macro is not designed to loop)
+pushlist 'numberOfBooks' '1'
+pushlist 'numberOfBooks' '2'
+pushlist 'numberOfBooks' '3'
+pushlist 'numberOfBooks' '4'
+pushlist 'numberOfBooks' '5'
+pushlist 'numberOfBooks' '6'
+pushlist 'numberOfBooks' '7'
+pushlist 'numberOfBooks' '8'
+pushlist 'numberOfBooks' '9'
+pushlist 'numberOfBooks' '10'
+pushlist 'numberOfBooks' '11'
+pushlist 'numberOfBooks' '12'
+pushlist 'numberOfBooks' '13'
+pushlist 'numberOfBooks' '14'
+pushlist 'numberOfBooks' '15'
+pushlist 'numberOfBooks' '16'
+// System Message colors
+pushlist 'textcolor' '43'
+pushlist 'errortextcolor' '33'
+// ******************************
+// Setup Tools
+// ******************************
+if not listexists 'ScribeTools'
+  createlist 'ScribeTools'
+  pushlist 'ScribeTools' 0xfbf   // 0 Pens
+  pushlist 'ScribeTools' 0x1eb8  // 1 Tinker Tools
+endif
+// ******************************
+// Tinker Skill check
+// ******************************
+if @inlist 'tinkerPens' 'Yes' or @inlist 'tinkerPens' 'yes'
+  if skill 'tinkering' < 40
+    sysmsg 'YOUR TINKERING SKILL IS TOO LOW' errortextcolor[0]
+    sysmsg 'CHANGE THE USE TINKERING SETTING OR RAISE SKILL' errortextcolor[0]
+    stop
+  endif
+endif
+// ******************************
+// Scribe Skill check
+// ******************************
+if skill 'inscription' < 90
+  sysmsg 'THIS MACRO IS NOT FOR TRAINING' errortextcolor[0]
+  sysmsg 'YOU MAY WASTE REAGENTS RUNNING IT' errortextcolor[0]
+  stop
+endif
+// ******************************
+// Setup Restock
+// ******************************
+if not findalias 'RegRestock'
+  promptalias 'RegRestock'
+endif
+if not findalias 'IngotRestock'
+  promptalias 'IngotRestock'
+endif
+if not findalias 'PenRestock'
+  promptalias 'PenRestock'
+endif
+// ******************************
+// Set Reg Bag
+// ******************************
+if not findalias 'regBag'
+  promtalias 'regBag'
+endif
+// ******************************
+// Setup Books List
+// ******************************
+if not @listexists 'SpellBooks'
+  createlist 'SpellBooks'
+endif
+if list 'SpellBooks' < 3
+  @clearlist 'SpellBooks'
+  @pushlist 'SpellBooks' 0xefa  // 0 Magery
+  @pushlist 'SpellBooks' 0x2253 // 1 Necromancy
+  @pushlist 'SpellBooks' 0x2d9d // 2 Mysticism
+endif
+// ******************************
+// Setup Supply list
+// ******************************
+if not @listexists 'ScribeSupplies'
+  createlist 'ScribeSupplies'
+endif
+@clearlist 'ScribeSupplies'
+@pushlist 'ScribeSupplies' 0xef3  // 0 Blank Scrolls
+@pushlist 'ScribeSupplies' 0xf7a  // 1 Black Pearl
+@pushlist 'ScribeSupplies' 0xf7b  // 2 Blood Moss
+@pushlist 'ScribeSupplies' 0xf84  // 3 Garlic
+@pushlist 'ScribeSupplies' 0xf85  // 4 Ginseng
+@pushlist 'ScribeSupplies' 0xf86  // 5 Mandrake
+@pushlist 'ScribeSupplies' 0xf88  // 6 Nightshade
+@pushlist 'ScribeSupplies' 0xf8c  // 7 Sulfuric Ash
+@pushlist 'ScribeSupplies' 0xf8d  // 8 Spider Silk
+@pushlist 'ScribeSupplies' 0xf78  // 9 Batwing
+@pushlist 'ScribeSupplies' 0xf7d  // 10 Daemon Blood
+@pushlist 'ScribeSupplies' 0xf8a  // 11 Pig Iron
+@pushlist 'ScribeSupplies' 0xf8e  // 12 Nox Crystal
+@pushlist 'ScribeSupplies' 0xf8f  // 13 Grave Dust
+@pushlist 'ScribeSupplies' 0xf7e  // 14 Bone
+@pushlist 'ScribeSupplies' 0xf81  // 15 Fertile Dirt
+@pushlist 'ScribeSupplies' 0x1bf2 // 16 Ingots
+// ******************************
+// Setup Main Gump Responses
+// ******************************
+if not listexists 'GumpCategory'
+  @createlist 'GumpCategory'
+endif
+if 'list' 'GumpCategory' == '0'
+  // 1 - 2
+  @pushlist 'GumpCategory' '1'
+  // 3 - 4
+  @pushlist 'GumpCategory' '8'
+  // 5 - 6
+  @pushlist 'GumpCategory' '15'
+  // 7 - 8
+  @pushlist 'GumpCategory' '22'
+  // Necro
+  @pushlist 'GumpCategory' '29'
+  // Other
+  @pushlist 'GumpCategory' '36'
+  // Mysticism
+  @pushlist 'GumpCategory' '43'
+endif
+// ******************************
+// Setup Magery Spells
+// ******************************
+if not @listexists 'FirstSecond'
+  createlist 'FirstSecond'
+endif
+if list 'FirstSecond' == 0
+  @pushlist 'FirstSecond' 0x1f2d // Reactive Armor
+  @pushlist 'FirstSecond' 0x1f2e // Clumsy
+  @pushlist 'FirstSecond' 0x1f2f // Create Food
+  @pushlist 'FirstSecond' 0x1f30 // Feeblemind
+  @pushlist 'FirstSecond' 0x1f31 // Heal
+  @pushlist 'FirstSecond' 0x1f32 // Magic Arrow
+  @pushlist 'FirstSecond' 0x1f33 // Night Sight
+  @pushlist 'FirstSecond' 0x1f34 // Weaken
+  @pushlist 'FirstSecond' 0x1f35 // Agility
+  @pushlist 'FirstSecond' 0x1f36 // Cunning
+  @pushlist 'FirstSecond' 0x1f37 // Cure
+  @pushlist 'FirstSecond' 0x1f38 // Harm
+  @pushlist 'FirstSecond' 0x1f39 // Magic Trap
+  @pushlist 'FirstSecond' 0x1f3a // Magic Untrap
+  @pushlist 'FirstSecond' 0x1f3b // Protection
+  @pushlist 'FirstSecond' 0x1f3c // Strength
+endif
+if not @listexists 'ThirdFourth'
+  createlist 'ThirdFourth'
+endif
+if list 'ThirdFourth' == 0
+  @pushlist 'ThirdFourth' 0x1f3d // Bless
+  @pushlist 'ThirdFourth' 0x1f3e // Fireball
+  @pushlist 'ThirdFourth' 0x1f3f // Magic Lock
+  @pushlist 'ThirdFourth' 0x1f40 // Poison
+  @pushlist 'ThirdFourth' 0x1f41 // Telekinesis
+  @pushlist 'ThirdFourth' 0x1f42 // Teleport
+  @pushlist 'ThirdFourth' 0x1f43 // Unlock
+  @pushlist 'ThirdFourth' 0x1f44 // Wall of Stone
+  @pushlist 'ThirdFourth' 0x1f45 // Arch Cure
+  @pushlist 'ThirdFourth' 0x1f46 // Arch Protection
+  @pushlist 'ThirdFourth' 0x1f47 // Curse
+  @pushlist 'ThirdFourth' 0x1f48 // Fire Field
+  @pushlist 'ThirdFourth' 0x1f49 // Greater Heal
+  @pushlist 'ThirdFourth' 0x1f4a // Lightning
+  @pushlist 'ThirdFourth' 0x1f4b // Mana Drain
+  @pushlist 'ThirdFourth' 0x1f4c // Recall
+endif
+if not @listexists 'FifthSixth'
+  createlist 'FifthSixth'
+endif
+if list 'FifthSixth' == 0
+  @pushlist 'FifthSixth' 0x1f4d // Blade Spirit
+  @pushlist 'FifthSixth' 0x1f4e // Dispel Field
+  @pushlist 'FifthSixth' 0x1f4f // Incognito
+  @pushlist 'FifthSixth' 0x1f50 // Magic Reflection
+  @pushlist 'FifthSixth' 0x1f51 // Mind Blast
+  @pushlist 'FifthSixth' 0x1f52 // Paralyze
+  @pushlist 'FifthSixth' 0x1f53 // Poison Field
+  @pushlist 'FifthSixth' 0x1f54 // Summon Creature
+  @pushlist 'FifthSixth' 0x1f55 // Dispel
+  @pushlist 'FifthSixth' 0x1f56 // Energy Bolt
+  @pushlist 'FifthSixth' 0x1f57 // Explosion
+  @pushlist 'FifthSixth' 0x1f58 // Invisibility
+  @pushlist 'FifthSixth' 0x1f59 // Mark
+  @pushlist 'FifthSixth' 0x1f5a // Mass Curse
+  @pushlist 'FifthSixth' 0x1f5b // Paralyze Field
+  @pushlist 'FifthSixth' 0x1f5c // Reveal
+endif
+if not @listexists 'SeventhEighth'
+  createlist 'SeventhEighth'
+endif
+if list 'SeventhEighth' == 0
+  @pushlist 'SeventhEighth' 0x1f5d // Chain Lightning
+  @pushlist 'SeventhEighth' 0x1f5e // Energy Field
+  @pushlist 'SeventhEighth' 0x1f5f // Flamestrike
+  @pushlist 'SeventhEighth' 0x1f60 // Gate Travel
+  @pushlist 'SeventhEighth' 0x1f61 // Mana Vampire
+  @pushlist 'SeventhEighth' 0x1f62 // Mass Dispel
+  @pushlist 'SeventhEighth' 0x1f63 // Meteor Swarm
+  @pushlist 'SeventhEighth' 0x1f64 // Polymorph
+  @pushlist 'SeventhEighth' 0x1f65 // Earthquake
+  @pushlist 'SeventhEighth' 0x1f66 // Energy Vortex
+  @pushlist 'SeventhEighth' 0x1f67 // Ressurrection
+  @pushlist 'SeventhEighth' 0x1f68 // Summon Air Elemental
+  @pushlist 'SeventhEighth' 0x1f69 // Summon Daemon
+  @pushlist 'SeventhEighth' 0x1f6a // Summon Earth Elemental
+  @pushlist 'SeventhEighth' 0x1f6b // Summon Fire Elemental
+  @pushlist 'SeventhEighth' 0x1f6c // Summon Water Elemental
+endif
+if not listexists 'MageGumpSpellResponse'
+  @createlist 'MageGumpSpellResponse'
+endif
+// ******************************
+// Setup Necromancy Spells
+// ******************************
+if not @listexists 'NecroSpells'
+  createlist 'NecroSpells'
+endif
+@pushlist 'NecroSpells' 0x2260 // Animate Dead
+@pushlist 'NecroSpells' 0x2261 // Blood Oath
+@pushlist 'NecroSpells' 0x2262 // Corpse Skin
+@pushlist 'NecroSpells' 0x2263 // Curse Weapon
+@pushlist 'NecroSpells' 0x2264 // Evil Omen
+@pushlist 'NecroSpells' 0x2265 // Horrific Beast
+@pushlist 'NecroSpells' 0x2266 // Lich Form
+@pushlist 'NecroSpells' 0x2267 // Mind Rot
+@pushlist 'NecroSpells' 0x2268 // Pain Spike
+@pushlist 'NecroSpells' 0x2269 // Poison Strike
+@pushlist 'NecroSpells' 0x226a // Strangle
+@pushlist 'NecroSpells' 0x226b // Summon Familiar
+@pushlist 'NecroSpells' 0x226c // Vampiric Embrace
+@pushlist 'NecroSpells' 0x226d // Vengeful Spirit
+@pushlist 'NecroSpells' 0x226e // Wither
+@pushlist 'NecroSpells' 0x226f // Wraith Form
+@pushlist 'NecroSpells' 0x2270 // Exorcism
+// ******************************
+// Setup Mysticism Spells
+// ******************************
+if not @listexists 'MysticismSpells'
+  createlist 'MysticismSpells'
+endif
+// ******************************
+// Initial Stock
+// ******************************
+if  @counttype ScribeTools[0] 'any' 'backpack' <= 1
+  if @inlist 'tinkerPens' 'Yes' or @inlist 'tinkerPens' 'yes'
+    // Have at least 2 TINKER TOOLS in pack
+    while @counttype ScribeTools[1] 'any' 'backpack' < 2
+      @usetype ScribeTools[1] 'any' 'backpack'
+      waitforgump 0x38920abd 15000
+      replygump 0x38920abd 15
+      waitforgump 0x38920abd 15000
+      replygump 0x38920abd 23
+      pause 1500
+    endwhile
+    while @counttype ScribeTools[0] 'any' 'backpack' < 9
+      usetype ScribeTools[1] 'any' 'backpack'
+      waitforgump 0x38920abd 15000
+      replygump 0x38920abd 15
+      waitforgump 0x38920abd 15000
+      replygump 0x38920abd 156
+      pause 1500
+    endwhile
+    if @gumpexists 0x38920abd
+      replygump 0x38920abd 0
+    endif
+  else
+    @organizer 'ScribePens' 'PenRestock' 'backpack'
+    while organizing
+      pause 600
+    endwhile
+  endif
+endif
+if @inlist 'tinkerPens' 'Yes' or @inlist 'tinkerPens' 'yes'
+  // INGOTS
+  @organizer 'ScribeIngots' 'IngotRestock' 'backpack'
+  while organizing
+    pause 600
+  endwhile
+  if @counttype ScribeSupplies[16] 'any' 'backpack' < 25
+    sysmsg "LOW ON INGOTS IN RESTOCK" errortextcolor[0]
+  endif
+endif
+// ******************************
+// Start Magery Create/Fill Cycle
+// ******************************
+if @inlist 'fillMageryBooks' 'Yes' or @inlist 'fillMageryBooks' 'yes'
+  for 0 to 'numberOfBooks'
+    organizer 'ScribeMage' 'RegRestock' 'backpack'
+    while organizing
+      pause 600
+    endwhile
+    if @inlist 'makeBooks' 'Yes' or @inlist 'makeBooks' 'yes'
+      while not findtype SpellBooks[0] 'any' 'backpack'
+        usetype ScribeTools[0] 'any' 'backpack'
+        waitforgump 0x38920abd 15000
+        replygump 0x38920abd 36
+        waitforgump 0x38920abd 15000
+        replygump 0x38920abd 37
+        waitforgump 0x38920abd 15000
+        pause 2000
+      endwhile
+    endif
+    if findtype SpellBooks[0] 'any' 'backpack'
+      pause 600
+      sysmsg 'FOUND SPELLBOOK' textcolor[0]
+      setalias 'mySpellbook' 'found'
+    else
+      sysmsg 'COULD NOT FIND A SPELLBOOK, STOPPING' errortextcolor[0]
+      stop
+    endif
+    if @inlist 'fillMagery12' 'Yes' or @inlist 'fillMagery12' 'yes'
+      if 'list' 'MageGumpSpellResponse' == '0'
+        @pushlist 'MageGumpSpellResponse' '2'
+        @pushlist 'MageGumpSpellResponse' '9'
+        @pushlist 'MageGumpSpellResponse' '16'
+        @pushlist 'MageGumpSpellResponse' '23'
+        @pushlist 'MageGumpSpellResponse' '30'
+        @pushlist 'MageGumpSpellResponse' '37'
+        @pushlist 'MageGumpSpellResponse' '44'
+        @pushlist 'MageGumpSpellResponse' '51'
+        @pushlist 'MageGumpSpellResponse' '58'
+        @pushlist 'MageGumpSpellResponse' '65'
+        @pushlist 'MageGumpSpellResponse' '72'
+        @pushlist 'MageGumpSpellResponse' '79'
+        @pushlist 'MageGumpSpellResponse' '86'
+        @pushlist 'MageGumpSpellResponse' '93'
+        @pushlist 'MageGumpSpellResponse' '100'
+        @pushlist 'MageGumpSpellResponse' '107'
+      endif
+      // RESTOCK
+      @organizer 'ScribeMage' 'RegRestock' 'backpack'
+      while organizing
+        pause 600
+      endwhile
+      @organizer 'ScribePens' 'PenRestock' 'backpack'
+      while organizing
+        pause 600
+      endwhile
+      // END RESTOCK
+      while not list 'MageGumpSpellResponse' == 0
+        usetype ScribeTools[0] 0x0 'backpack'
+        waitforgump 0x38920abd 15000
+        replygump 0x38920abd GumpCategory[0]
+        waitforgump 0x38920abd 15000
+        replygump 0x38920abd MageGumpSpellResponse[0]
+        pause 2500
+        for 0 to 'FirstSecond'
+          if @findtype FirstSecond[] 'any' 'backpack'
+            @moveitem 'found' 'mySpellbook'
+            poplist 'MageGumpSpellResponse' 'front'
+            pause 1000
+            if @findtype FirstSecond[] 'any' 'backpack'
+              @moveitem 'found' 'ScribeRestock'
+            endif
+          endif
+        endfor
+        while mana < maxmana
+          while not buffexists 'Meditation' and mana < maxmana
+            useskill 'Meditation'
+            pause 600
+          endwhile
+          pause 600
+        endwhile
+      endwhile
+    endif
+    if @inlist 'fillMagery34' 'Yes' or @inlist 'fillMagery34' 'yes'
+      if 'list' 'MageGumpSpellResponse' == '0'
+        @pushlist 'MageGumpSpellResponse' '2'
+        @pushlist 'MageGumpSpellResponse' '9'
+        @pushlist 'MageGumpSpellResponse' '16'
+        @pushlist 'MageGumpSpellResponse' '23'
+        @pushlist 'MageGumpSpellResponse' '30'
+        @pushlist 'MageGumpSpellResponse' '37'
+        @pushlist 'MageGumpSpellResponse' '44'
+        @pushlist 'MageGumpSpellResponse' '51'
+        @pushlist 'MageGumpSpellResponse' '58'
+        @pushlist 'MageGumpSpellResponse' '65'
+        @pushlist 'MageGumpSpellResponse' '72'
+        @pushlist 'MageGumpSpellResponse' '79'
+        @pushlist 'MageGumpSpellResponse' '86'
+        @pushlist 'MageGumpSpellResponse' '93'
+        @pushlist 'MageGumpSpellResponse' '100'
+        @pushlist 'MageGumpSpellResponse' '107'
+      endif
+      // RESTOCK
+      @organizer 'ScribeMage' 'RegRestock' 'backpack'
+      while organizing
+        pause 600
+      endwhile
+      @organizer 'ScribePens' 'PenRestock' 'backpack'
+      while organizing
+        pause 600
+      endwhile
+      // END RESTOCK
+      while not list 'MageGumpSpellResponse' == 0
+        usetype ScribeTools[0] 0x0 'backpack'
+        waitforgump 0x38920abd 15000
+        replygump 0x38920abd GumpCategory[1]
+        waitforgump 0x38920abd 15000
+        replygump 0x38920abd MageGumpSpellResponse[0]
+        pause 2500
+        for 0 to 'ThirdFourth'
+          if @findtype ThirdFourth[] 'any' 'backpack'
+            @moveitem 'found' 'mySpellbook'
+            poplist 'MageGumpSpellResponse' 'front'
+            pause 1000
+            if @injournal 'is already present' 'system'
+              @clearjournal
+              if @findtype ThirdFourth[] 'any' 'backpack'
+                @moveitem 'found' 'ScribeRestock'
+              endif
+            endif
+          endif
+        endfor
+        while mana < maxmana
+          while not buffexists 'Meditation' and mana < maxmana
+            useskill 'Meditation'
+            pause 600
+          endwhile
+          pause 600
+        endwhile
+      endwhile
+    endif
+    if @inlist 'fillMagery56' 'Yes' or @inlist 'fillMagery56' 'yes'
+      if 'list' 'MageGumpSpellResponse' == '0'
+        @pushlist 'MageGumpSpellResponse' '2'
+        @pushlist 'MageGumpSpellResponse' '9'
+        @pushlist 'MageGumpSpellResponse' '16'
+        @pushlist 'MageGumpSpellResponse' '23'
+        @pushlist 'MageGumpSpellResponse' '30'
+        @pushlist 'MageGumpSpellResponse' '37'
+        @pushlist 'MageGumpSpellResponse' '44'
+        @pushlist 'MageGumpSpellResponse' '51'
+        @pushlist 'MageGumpSpellResponse' '58'
+        @pushlist 'MageGumpSpellResponse' '65'
+        @pushlist 'MageGumpSpellResponse' '72'
+        @pushlist 'MageGumpSpellResponse' '79'
+        @pushlist 'MageGumpSpellResponse' '86'
+        @pushlist 'MageGumpSpellResponse' '93'
+        @pushlist 'MageGumpSpellResponse' '100'
+        @pushlist 'MageGumpSpellResponse' '107'
+      endif
+      // RESTOCK
+      @organizer 'ScribeMage' 'RegRestock' 'backpack'
+      while organizing
+        pause 600
+      endwhile
+      @organizer 'ScribePens' 'PenRestock' 'backpack'
+      while organizing
+        pause 600
+      endwhile
+      // END RESTOCK
+      while not list 'MageGumpSpellResponse' == 0
+        usetype ScribeTools[0] 0x0 'backpack'
+        waitforgump 0x38920abd 15000
+        replygump 0x38920abd GumpCategory[2]
+        waitforgump 0x38920abd 15000
+        replygump 0x38920abd MageGumpSpellResponse[0]
+        pause 2500
+        for 0 to 'FifthSixth'
+          if @findtype FifthSixth[] 'any' 'backpack'
+            @moveitem 'found' 'mySpellbook'
+            poplist 'MageGumpSpellResponse' 'front'
+            pause 1000
+            if @injournal 'is already present' 'system'
+              @clearjournal
+              if @findtype FifthSixth[] 'any' 'backpack'
+                @moveitem 'found' 'ScribeRestock'
+              endif
+            endif
+          endif
+        endfor
+        while mana < maxmana
+          while not buffexists 'Meditation' and mana < maxmana
+            useskill 'Meditation'
+            pause 600
+          endwhile
+          pause 600
+        endwhile
+      endwhile
+    endif
+    if @inlist 'fillMagery78' 'Yes' or @inlist 'fillMagery78' 'yes'
+      if 'list' 'MageGumpSpellResponse' == '0'
+        @pushlist 'MageGumpSpellResponse' '2'
+        @pushlist 'MageGumpSpellResponse' '9'
+        @pushlist 'MageGumpSpellResponse' '16'
+        @pushlist 'MageGumpSpellResponse' '23'
+        @pushlist 'MageGumpSpellResponse' '30'
+        @pushlist 'MageGumpSpellResponse' '37'
+        @pushlist 'MageGumpSpellResponse' '44'
+        @pushlist 'MageGumpSpellResponse' '51'
+        @pushlist 'MageGumpSpellResponse' '58'
+        @pushlist 'MageGumpSpellResponse' '65'
+        @pushlist 'MageGumpSpellResponse' '72'
+        @pushlist 'MageGumpSpellResponse' '79'
+        @pushlist 'MageGumpSpellResponse' '86'
+        @pushlist 'MageGumpSpellResponse' '93'
+        @pushlist 'MageGumpSpellResponse' '100'
+        @pushlist 'MageGumpSpellResponse' '107'
+      endif
+      // RESTOCK
+      @organizer 'ScribeMage' 'RegRestock' 'backpack'
+      while organizing
+        pause 600
+      endwhile
+      @organizer 'ScribePens' 'PenRestock' 'backpack'
+      while organizing
+        pause 600
+      endwhile
+      // END RESTOCK
+      while not list 'MageGumpSpellResponse' == 0
+        usetype ScribeTools[0] 0x0 'backpack'
+        waitforgump 0x38920abd 15000
+        replygump 0x38920abd GumpCategory[3]
+        waitforgump 0x38920abd 15000
+        replygump 0x38920abd MageGumpSpellResponse[0]
+        pause 2500
+        for 0 to 'SeventhEighth'
+          if @findtype SeventhEighth[] 'any' 'backpack'
+            @moveitem 'found' 'mySpellbook'
+            poplist 'MageGumpSpellResponse' 'front'
+            pause 1000
+            if @injournal 'is already present' 'system'
+              @clearjournal
+              if @findtype SeventhEighth[] 'any' 'backpack'
+                @moveitem 'found' 'ScribeRestock'
+              endif
+            endif
+          endif
+        endfor
+        while mana < maxmana
+          while not buffexists 'Meditation' and mana < maxmana
+            useskill 'Meditation'
+            pause 600
+          endwhile
+          pause 600
+        endwhile
+      endwhile
+    endif
+    pause 1000
+    moveitem 'myspellbook' 'PenRestock'
+    pause 3000
+  endfor
+endif
+// ******************************
+// Start Necromancy Create/Fill Cycle
+// ******************************
+if @inlist 'fillNecroBooks' 'Yes' or @inlist 'fillNecroBooks' 'yes'
+  for 0 to 'numberOfBooks'
+    @organizer 'ScribeNecro' 'RegRestock' 'backpack'
+    while organizing
+      pause 600
+    endwhile
+    @organizer 'ScribePens' 'PenRestock' 'backpack'
+    while organizing
+      pause 600
+    endwhile
+    if @inlist 'makeBooks' 'Yes' or @inlist 'makeBooks' 'yes'
+      while not findtype SpellBooks[1] 'any' 'backpack'
+        usetype ScribeTools[0] 'any' 'backpack'
+        waitforgump 0x38920abd 15000
+        replygump 0x38920abd 36
+        waitforgump 0x38920abd 15000
+        replygump 0x38920abd 58
+        waitforgump 0x38920abd 15000
+        pause 2000
+      endwhile
+    endif
+    if findtype SpellBooks[1] 'any' 'backpack'
+      pause 600
+      sysmsg 'FOUND NECRO BOOK' textcolor[0]
+      setalias 'mySpellbook' 'found'
+    else
+      sysmsg 'COULD NOT FIND A NECRO BOOK, STOPPING' errortextcolor[0]
+      stop
+    endif
+    if 'list' 'MageGumpSpellResponse' == '0'
+      @pushlist 'MageGumpSpellResponse' '2'
+      @pushlist 'MageGumpSpellResponse' '9'
+      @pushlist 'MageGumpSpellResponse' '16'
+      @pushlist 'MageGumpSpellResponse' '23'
+      @pushlist 'MageGumpSpellResponse' '30'
+      @pushlist 'MageGumpSpellResponse' '37'
+      @pushlist 'MageGumpSpellResponse' '44'
+      @pushlist 'MageGumpSpellResponse' '51'
+      @pushlist 'MageGumpSpellResponse' '58'
+      @pushlist 'MageGumpSpellResponse' '65'
+      @pushlist 'MageGumpSpellResponse' '72'
+      @pushlist 'MageGumpSpellResponse' '79'
+      @pushlist 'MageGumpSpellResponse' '86'
+      @pushlist 'MageGumpSpellResponse' '93'
+      @pushlist 'MageGumpSpellResponse' '100'
+      @pushlist 'MageGumpSpellResponse' '107'
+      @pushlist 'MageGumpSpellResponse' '114'
+    endif
+    while not list 'MageGumpSpellResponse' == 0
+      usetype ScribeTools[0] 0x0 'backpack'
+      waitforgump 0x38920abd 15000
+      replygump 0x38920abd GumpCategory[4]
+      waitforgump 0x38920abd 15000
+      replygump 0x38920abd MageGumpSpellResponse[0]
+      pause 2500
+      for 0 to 'NecroSpells'
+        if @findtype NecroSpells[] 'any' 'backpack'
+          @moveitem 'found' 'mySpellbook'
+          poplist 'MageGumpSpellResponse' 'front'
+          pause 1000
+          if @injournal 'is already present' 'system'
+            @clearjournal
+            if @findtype NecroSpells[] 'any' 'backpack'
+              @moveitem 'found' 'ScribeRestock'
+            endif
+          endif
+        endif
+      endfor
+      while mana < maxmana
+        while not buffexists 'Meditation' and mana < maxmana
+          useskill 'Meditation'
+          pause 600
+        endwhile
+        pause 600
+      endwhile
+    endwhile
+    pause 1000
+    moveitem 'myspellbook' 'PenRestock'
+    pause 3000
+  endfor
+endif
