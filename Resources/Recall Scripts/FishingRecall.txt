@@ -1,3 +1,24 @@
+if not listexists 'cutFish'
+  @createlist 'cutFish'
+endif
+@clearlist 'cutFish'
+@clearlist 'fishweightlimit'
+@createlist 'fishweightlimit'
+// USER OPTION
+pushlist 'cutFish' 'No'
+pushlist 'fishweightlimit' '340'
+// ******************************
+// Setup HomeRune
+// ******************************
+// This should be the position in your Runebook at
+// which your home recall position is located
+// ******************************
+if not @listexists 'FishHomeRune'
+  @createlist 'FishHomeRune'
+endif
+@clearlist 'FishHomeRune'
+pushlist 'FishHomeRune' 50
+// *******************************
 if not @findobject 'FishingPole'
   promptalias 'FishingPole'
 endif
@@ -9,6 +30,9 @@ if not @findobject 'FishBookTwo'
 endif
 if not @findobject 'FishBookThree'
   promptalias 'FishBookThree'
+endif
+if not @findobject 'FishingHome'
+  promptalias 'FishingHome'
 endif
 if not @findobject 'FishBlade'
   promptalias 'FishBlade'
@@ -56,6 +80,14 @@ for 0 to 'FishBook'
       stop
     endif
     while not @injournal 'seem to be biting' 'system'
+      if hits < 80
+        playsound 'alert.wav'
+        pause 600
+        playsound 'alert.wav'
+        pause 600
+        playsound 'alert.wav'
+        pause 600
+      endif
       pause 600
       useobject 'FishingPole'
       waitfortarget 15000
@@ -65,29 +97,51 @@ for 0 to 'FishBook'
         continue
       endif
       pause 8000
-      if @findtype 0x9cc 'any' 'backpack'
-        useobject 'FishBlade'
-        waitingfortarget 15000
-        @target 'found'
-        pause 600
+      if @inlist 'cutFish' 'Yes' or @inlist 'cutFish' 'yes'
+        if @findtype 0x9cc 'any' 'backpack'
+          useobject 'FishBlade'
+          waitingfortarget 15000
+          @target 'found'
+          pause 600
+        endif
+        if @findtype 0x9ce 'any' 'backpack'
+          useobject 'FishBlade'
+          waitingfortarget 15000
+          @target 'found'
+          pause 600
+        endif
+        if @findtype 0x9cd 'any' 'backpack'
+          useobject 'FishBlade'
+          waitingfortarget 15000
+          @target 'found'
+          pause 600
+        endif
+        if @findtype 0x9cf 'any' 'backpack'
+          useobject 'FishBlade'
+          waitingfortarget 15000
+          @target 'found'
+          pause 600
+        endif
       endif
-      if @findtype 0x9ce 'any' 'backpack'
-        useobject 'FishBlade'
-        waitingfortarget 15000
-        @target 'found'
+      if weight > fishweightlimit[0]
         pause 600
-      endif
-      if @findtype 0x9cd 'any' 'backpack'
-        useobject 'FishBlade'
-        waitingfortarget 15000
-        @target 'found'
-        pause 600
-      endif
-      if @findtype 0x9cf 'any' 'backpack'
-        useobject 'FishBlade'
-        waitingfortarget 15000
-        @target 'found'
-        pause 600
+        useobject 'FishingHome'
+        waitforgump 0x59 5000
+        replygump 0x59 FishHomeRune[0]
+        pause 2500
+        organizer 'Fish'
+        while organizing
+          pause 1000
+        endwhile
+        useobject FishBook[]
+        waitforgump 0x59 5000
+        replygump 0x59 FishRunes[]
+        pause 2000
+        if @injournal 'location is blocked' 'system'
+          continue
+        endif
+        equipitem 'FishingPole' 1
+        pause 1500
       endif
     endwhile
     //if @findtype 0x97a 'any' 'backpack'
