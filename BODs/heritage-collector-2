@@ -1,0 +1,25 @@
+// Alchemist
+waitforcontext 0xef32 1 2000
+pause 200
+if gumpexists 0x9bade6ea
+  replygump 0x9bade6ea 1
+elseif gumpexists 0xbe0dad1e
+  replygump 0xbe0dad1e 1
+endif
+pause 600
+// Scribe
+waitforcontext 0xef35 1 2000
+pause 300
+if gumpexists 0x9bade6ea
+  replygump 0x9bade6ea 1
+elseif gumpexists 0xbe0dad1e
+  replygump 0xbe0dad1e 1
+endif
+pause 600
+if @findtype 0x2259 'any' 'backpack'
+  setalias 'BODBook' 'found'
+  while @findtype 0x2258 'any' 'backpack'
+    moveitem 'found' 'BODBook'
+    //pause 600
+  endwhile
+endif
