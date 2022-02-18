@@ -1,0 +1,41 @@
+// raveX
+
+// This macro will determine if the player
+// is in wraith form or not and ensure
+// that the player reverses the current
+// state.
+// Was useful for character with low
+// Necro and it cycled a ring with +15
+// Necro to assist the cast success
+
+if not @listexists 'wraith'
+  @createlist 'wraith'
+endif
+@clearlist 'wraith'
+if buffexists 'Wraith Form'
+  pushlist 'wraith' 'yes'
+else
+  pushlist 'wraith' 'no'
+endif
+moveitem 0x40092e08 'backpack' 107 65 0
+pause 1000
+equipitem 0x40003c35 8
+pause 1000
+if inlist 'wraith' 'no'
+  while not buffexists 'Wraith Form'
+    cast "Wraith Form"
+    pause 2000
+  endwhile
+  @clearlist 'wraith'
+  pushlist 'wraith' 'yes'
+elseif inlist 'wraith' 'yes'
+  while buffexists 'Wraith Form'
+    cast "Wraith Form"
+    pause 2000
+  endwhile
+  @clearlist 'wraith'
+  pushlist 'wraith' 'no'
+endif
+moveitem 0x40003c35 'backpack' 97 65 0
+pause 1000
+equipitem 0x40092e08 8
