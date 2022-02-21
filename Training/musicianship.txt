@@ -1,0 +1,30 @@
+if not listexists 'Instruments'
+  createlist 'Instruments'
+  pushlist 'Instruments' 0xeb2 // lap harp
+  pushlist 'Instruments' 0xeb3 // lute
+  pushlist 'Instruments' 0xe9c // drum
+  pushlist 'Instruments' 0xe9d // tambourine
+  pushlist 'Instruments' 0xe9e // tambourine with tassel
+  pushlist 'Instruments' 0xe9d // bamboo flute
+endif
+while skill 'Musicianship' < 120
+  if @findtype Instruments[0] 'any' 'backpack'
+    useobject 'found'
+    pause 2000
+  elseif @findtype Instruments[1] 'any' 'backpack'
+    useobject 'found'
+    pause 2000
+  elseif @findtype Instruments[2] 'any' 'backpack'
+    useobject 'found'
+    pause 2000
+  elseif @findtype Instruments[3] 'any' 'backpack'
+    useobject 'found'
+    pause 2000
+  elseif @findtype Instruments[4] 'any' 'backpack'
+    useobject 'found'
+    pause 2000
+  elseif @findtype Instruments[5] 'any' 'backpack'
+    useobject 'found'
+    pause 2000
+  endif
+endwhile
